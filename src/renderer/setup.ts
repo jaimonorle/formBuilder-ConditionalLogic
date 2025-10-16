@@ -135,6 +135,63 @@ function parseLogicAttr(el: HTMLElement): LogicConfig | null {
   }
 }
 
+function strifyLogic(logic: any): string | null {
+    if (!logic) return null;
+    if (typeof logic === 'string') return logic;
+    try { return JSON.stringify(logic); } catch { return null; }
+}
+
+function queryByNameAll(form: HTMLElement, name: string): NodeListOf<HTMLElement> {
+    const n = cssEscape(name);
+    return form.querySelectorAll<HTMLElement>(`[name="${n}"], [name="${n}[]"]`);
+}
+
+function hydrateFromFormData(form: HTMLElement, formData: any) {
+    if (!formData) return;
+    try {
+        if (typeof formData === 'string') formData = JSON.parse(formData);
+    } catch {
+        return; // ignore invalid strings
+    }
+    if (!Array.isArray(formData)) return;
+
+    for (const field of formData) {
+        const name: string | undefined = field?.name;
+        if (!name) continue;
+
+        const nodes = queryByNameAll(form, name);
+        if (!nodes.length) continue;
+
+        const logicJson = strifyLogic(field.logic);
+        const applyTo = field.logicApplyTo || field.applyTo || 'self';
+        const groupId = field.logicGroup;
+
+        // Group-only (no per-field logic)
+        if (!logicJson && groupId && applyTo === 'group') {
+            nodes.forEach(el => el.setAttribute('data-logic-group', String(groupId)));
+            continue;
+        }
+
+        if (!logicJson) continue;
+
+        if (applyTo === 'container') {
+            nodes.forEach(el => {
+                const wrap = (typeof (window as any).FB_GET_WRAPPER === 'function')
+                    ? (window as any).FB_GET_WRAPPER(el)
+                    : defaultWrapper(el);
+                wrap.setAttribute('data-logic-container', logicJson);
+            });
+        } else if (applyTo === 'group' && groupId) {
+            // Prefer group control; per-field logic is ignored in this mode
+            nodes.forEach(el => el.setAttribute('data-logic-group', String(groupId)));
+        } else {
+            // Self
+            nodes.forEach(el => el.setAttribute('data-logic', logicJson));
+        }
+    }
+}
+
+
 function findTargets(form: HTMLElement): Array<{ el: HTMLElement, cfg: LogicConfig, mode: 'self'|'container'|'group', groupId?: string }> {
   const targets: Array<{ el: HTMLElement, cfg: LogicConfig, mode: 'self'|'container'|'group', groupId?: string }> = [];
   form.querySelectorAll('[data-logic]').forEach((el) => {
@@ -173,8 +230,14 @@ function reeval(form: HTMLElement, targets: ReturnType<typeof findTargets>, opti
 }
 
 export function setup(formEl: HTMLElement | Element, _formData?: any, options: SetupOptions = {}) {
-  const form = formEl as HTMLElement;
-  const targets = findTargets(form);
+    const form = formEl as HTMLElement;
+
+    // NEW: Map builder JSON to data- attributes on the rendered DOM
+    if (_formData) {
+        try { hydrateFromFormData(form, _formData); } catch { }
+    }
+
+    const targets = findTargets(form);
   const watched = new Set<string>();
   targets.forEach(t => { t.cfg.groups?.forEach(g => g.rules.forEach(r => watched.add(r.field))); });
 
