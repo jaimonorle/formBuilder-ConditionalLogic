@@ -1,0 +1,87 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Composed Demo (Builder JSON → Render + Logic)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Composed Demo</h1>
+    <p class="text-muted">This page renders from a JSON template and applies conditional logic from the same JSON.</p>
+
+    <div id="render"></div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/formBuilder@3.21.1/dist/form-render.min.js"></script>
+
+    <script type="module">
+      import { setup } from '/src/renderer/setup.ts';
+
+      // Sample formData you could paste from the Builder's "Export JSON to console"
+      const formData = [
+        {
+          "type": "radio-group",
+          "label": "Do you have a vehicle?",
+          "name": "hasVehicle",
+          "values": [
+            { "label": "Yes", "value": "yes" },
+            { "label": "No",  "value": "no", "selected": true }
+          ]
+        },
+        {
+          "type": "text",
+          "label": "Vehicle Make",
+          "name": "vehicleMake",
+          "logic": {
+            "groups": [ { "mode": "any", "rules": [ { "field": "hasVehicle", "op": "equals", "value": "yes" } ] } ],
+            "actions": ["show","require"]
+          },
+          "logicApplyTo": "container"
+        },
+        {
+          "type": "text",
+          "label": "Vehicle Model",
+          "name": "vehicleModel",
+          "logic": {
+            "groups": [ { "mode": "any", "rules": [ { "field": "hasVehicle", "op": "equals", "value": "yes" } ] } ],
+            "actions": ["show","require"]
+          },
+          "logicApplyTo": "container"
+        },
+        {
+          "type": "select",
+          "label": "Country",
+          "name": "country",
+          "values": [
+            { "label": "Select...", "value": "" },
+            { "label": "Dominica", "value": "Dominica" },
+            { "label": "Barbados", "value": "Barbados" }
+          ]
+        },
+        {
+          "type": "text",
+          "label": "State/Parish",
+          "name": "state",
+          "logic": {
+            "groups":[{ "mode":"any", "rules":[{ "field":"country","op":"notEmpty" }] }],
+            "actions":["show"]
+          },
+          "logicApplyTo": "self"
+        }
+      ];
+
+      // Render into #render
+      const $root = window.jQuery('#render');
+      $root.formRender({ formData });
+
+      // Apply conditional logic using the same JSON
+      setup($root[0], formData);
+    </script>
+</body>
+</html>
