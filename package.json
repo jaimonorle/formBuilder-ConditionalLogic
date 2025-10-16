@@ -1,0 +1,38 @@
+{
+  "name": "formbuilder-conditional-logic",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/formbuilder-conditional-logic.umd.cjs",
+  "module": "dist/formbuilder-conditional-logic.es.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/formbuilder-conditional-logic.es.js",
+      "require": "./dist/formbuilder-conditional-logic.umd.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:ui": "vitest",
+    "lint": "eslint . --ext .ts,.tsx,.js"
+  },
+  "peerDependencies": {
+    "jquery": ">=3.6.0"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.30",
+    "@typescript-eslint/eslint-plugin": "^8.8.0",
+    "@typescript-eslint/parser": "^8.8.0",
+    "eslint": "^9.13.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.9",
+    "vite-plugin-dts": "^3.8.1",
+    "vitest": "^2.1.3"
+  }
+}
