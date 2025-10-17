@@ -175,6 +175,36 @@ interface LogicConfig {
 
 ---
 
+### Visual Rules Editor (v0.2.0)
+
+Enable the no-JSON editor in the builder panel. It auto-lists fields from your form and (for radio/select) their option values.
+
+```js
+import { withConditionalLogic } from 'formbuilder-conditional-logic/builder';
+
+const fb = $('.build-wrap').formBuilder({
+  ...withConditionalLogic({
+    enableVisualEditor: true,
+    getAvailableFields: () => {
+      const data = fb.actions.getData('json');
+      const arr = typeof data === 'string' ? JSON.parse(data) : data;
+      return arr.filter(f => f?.name).map(f => ({
+        name: f.name, type: f.type, label: f.label,
+        values: Array.isArray(f.values) ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value })) : undefined
+      }));
+    },
+    getFieldValues: (fieldName) => {
+      const data = fb.actions.getData('json');
+      const arr = typeof data === 'string' ? JSON.parse(data) : data;
+      const f = arr.find(x => x?.name === fieldName);
+      return f?.values ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value })) : null;
+    }
+  })
+});
+
+```
+
+
 ## License
 
 MIT
