@@ -39,36 +39,58 @@
         import { withConditionalLogic, attachLogicGroupsManager } from '/src/plugin/builder.ts';
 
         const toolbar = document.getElementById('toolbar');
-        attachLogicGroupsManager(toolbar);
 
-        let fb; // we'll reference it inside the hooks
-        const options = withConditionalLogic({
-            panelTitle: 'Conditional Logic',
-            enableVisualEditor: true,
-            getAvailableFields: () => {
-                const json = fb.actions.getData('json');
-                const arr = typeof json === 'string' ? JSON.parse(json) : Array.isArray(json) ? json : [];
-                return arr.filter(f => f?.name).map(f => ({
+        // Optional: turn on console logs while testing the renderer later
+        // window.__FB_LOGIC_DEBUG__ = true;
+
+        let fb; // will be set after we create the builder
+
+        // Helper to read the current builder JSON as an array
+        const getFormArray = () => {
+            const data = fb?.actions?.getData?.('json');
+            return typeof data === 'string' ? JSON.parse(data) : (Array.isArray(data) ? data : []);
+        };
+
+        // Field + value providers (used by both per-field VE and groups VE)
+        const getAvailableFields = () => {
+            const arr = getFormArray();
+            return arr
+                .filter(f => f?.name)
+                .map(f => ({
                     name: f.name,
                     type: f.type,
                     label: f.label,
-                    values: Array.isArray(f.values) ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value })) : undefined
+                    values: Array.isArray(f.values)
+                        ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value }))
+                        : undefined
                 }));
-            },
-            getFieldValues: (fieldName) => {
-                const json = fb.actions.getData('json');
-                const arr = typeof json === 'string' ? JSON.parse(json) : Array.isArray(json) ? json : [];
-                const f = arr.find(ff => ff?.name === fieldName);
-                if (f && Array.isArray(f.values)) {
-                    return f.values.map(v => ({ label: v.label ?? v.value, value: v.value }));
-                }
-                return null;
-            }
+        };
+
+        const getFieldValues = (fieldName) => {
+            const arr = getFormArray();
+            const f = arr.find(ff => ff?.name === fieldName);
+            return Array.isArray(f?.values)
+                ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value }))
+                : null;
+        };
+
+        // 1) Initialize formBuilder with the Conditional Logic panel + Visual Rules Editor
+        const options = withConditionalLogic({
+            panelTitle: 'Conditional Logic',
+            enableVisualEditor: true,
+            getAvailableFields,
+            getFieldValues
         });
 
-        fb = (window).jQuery('.build-wrap').formBuilder(options);
+        fb = window.jQuery('.build-wrap').formBuilder(options);
 
-        // Export helper
+        // 2) Attach the Logic Groups (GUI) manager to the toolbar with the same hooks
+        attachLogicGroupsManager(toolbar, {
+            getAvailableFields,
+            getFieldValues
+        });
+
+        // 3) Export helper (prints the form JSON array to the console)
         const exportBtn = document.createElement('button');
         exportBtn.className = 'btn btn-sm btn-outline-secondary ms-2';
         exportBtn.textContent = 'Export JSON to console';
@@ -79,6 +101,7 @@
         };
         toolbar.appendChild(exportBtn);
     </script>
+
 
 </body>
 </html>
