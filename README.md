@@ -205,6 +205,42 @@ const fb = $('.build-wrap').formBuilder({
 ```
 
 
+### Visual Groups Editor (GUI) — v0.2.x
+
+Use the toolbar **Logic Groups** button to define reusable groups without writing JSON.
+
+```js
+import { withConditionalLogic, attachLogicGroupsManager } from 'formbuilder-conditional-logic/builder';
+
+let fb;
+const options = withConditionalLogic({
+  enableVisualEditor: true,
+  getAvailableFields: () => {
+    const data = fb.actions.getData('json');
+    const arr = typeof data === 'string' ? JSON.parse(data) : data;
+    return arr.filter(f => f?.name).map(f => ({
+      name: f.name, type: f.type, label: f.label,
+      values: Array.isArray(f.values) ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value })) : undefined
+    }));
+  },
+  getFieldValues: (fieldName) => {
+    const data = fb.actions.getData('json');
+    const arr = typeof data === 'string' ? JSON.parse(data) : data;
+    const f = arr.find(x => x?.name === fieldName);
+    return f?.values ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value })) : null;
+  }
+});
+
+fb = $('.build-wrap').formBuilder(options);
+
+// NEW: GUI Groups manager wired with the same hooks
+attachLogicGroupsManager(document.getElementById('fb-toolbar'), {
+  getAvailableFields: options.getAvailableFields,
+  getFieldValues: options.getFieldValues
+});
+
+```
+
 ## License
 
 MIT

@@ -8,8 +8,22 @@
 - Logic Groups modal (toolbar helper)
 - Demos: builder, render (static), composed (builder JSON → render)
 
-## 0.2.0 — Visual Rules Editor
-- Builder: Visual, no-JSON editor for rules
-- Hooks: getAvailableFields / getFieldValues
-- Demo: builder wired to provide options from current form
-- Fix: prevent duplicate Visual Rules Editor mounts
+## 0.2.0 — Visual Editors
+- Builder: **Visual Rules Editor** (no-JSON) for per-field logic
+- Hooks: `getAvailableFields`, `getFieldValues` to populate field/value dropdowns
+- Builder: **Visual Groups Editor** (GUI) for reusable groups
+- Advanced (JSON) panels now wrapped and collapsed by default
+- Demo updated to wire hooks from current form JSON
+
+
+
+# 4) CHANGELOG update
+Append a section for your new tag.
+
+### If tagging **0.2.1**
+```markdown
+## 0.2.1 — GUI polish + Advanced panels
+- Builder: Visual Rules Editor title moved outside dashed border (consistent with Advanced)
+- Builder: Per-field **Advanced (JSON)** panel added, wrapped and **collapsed by default**
+- Groups modal: **Visual Groups Editor** (GUI) added; Advanced (JSON) panel collapsed by default
+- Fix: guard against duplicate Visual Editor mounts
