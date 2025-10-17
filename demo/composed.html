@@ -23,62 +23,23 @@
     <script type="module">
         import { setup } from '/src/renderer/setup.ts';
 
-        // Replace this array with the JSON you export from the Builder.
-        const formData = [
-            {
-                "type": "radio-group",
-                "label": "Do you have a vehicle?",
-                "name": "hasVehicle",
-                "values": [
-                    { "label": "Yes", "value": "yes" },
-                    { "label": "No", "value": "no", "selected": true }
-                ]
-            },
-            {
-                "type": "text",
-                "label": "Vehicle Make",
-                "name": "vehicleMake",
-                "logic": {
-                    "groups": [{ "mode": "any", "rules": [{ "field": "hasVehicle", "op": "equals", "value": "yes" }] }],
-                    "actions": ["show", "require"]
-                },
-                "logicApplyTo": "container"
-            },
-            {
-                "type": "text",
-                "label": "Vehicle Model",
-                "name": "vehicleModel",
-                "logic": {
-                    "groups": [{ "mode": "any", "rules": [{ "field": "hasVehicle", "op": "equals", "value": "yes" }] }],
-                    "actions": ["show", "require"]
-                },
-                "logicApplyTo": "container"
-            },
-            {
-                "type": "select",
-                "label": "Country",
-                "name": "country",
-                "values": [
-                    { "label": "Select...", "value": "" },
-                    { "label": "Dominica", "value": "Dominica" },
-                    { "label": "Barbados", "value": "Barbados" }
-                ]
-            },
-            {
-                "type": "text",
-                "label": "State/Parish",
-                "name": "state",
-                "logic": {
-                    "groups": [{ "mode": "any", "rules": [{ "field": "country", "op": "notEmpty" }] }],
-                    "actions": ["show"]
-                },
-                "logicApplyTo": "self"
-            }
-        ];
+        // Turn on debug logs:
+        window.__FB_LOGIC_DEBUG__ = true;
+
+        // IMPORTANT: Make sure the radio values match the rule ("yes"/"no"), or update the rule accordingly.
+        const formData = [{ "type": "radio-group", "required": false, "label": "Do you have a vehicle?", "inline": false, "name": "hasVehicle", "access": false, "other": false, "logicApplyTo": "self", "values": [{ "label": "Yes", "value": "yes", "selected": false }, { "label": "No", "value": "no", "selected": true }] }, { "type": "text", "required": false, "label": "Vehicle Make", "className": "form-control", "name": "vehicleMake", "access": false, "subtype": "text", "logic": "{\n  \"groups\":[\n    {\"mode\":\"any\",\"rules\":[{\"field\":\"hasVehicle\",\"op\":\"equals\",\"value\":\"yes\"}]}\n  ],\n  \"actions\":[\"show\",\"require\"]\n}\n", "logicApplyTo": "self" }, { "type": "text", "required": false, "label": "Vehicle Model", "className": "form-control", "name": "vehicleModel", "access": false, "subtype": "text", "logic": "{\n  \"groups\":[\n    {\"mode\":\"any\",\"rules\":[{\"field\":\"hasVehicle\",\"op\":\"equals\",\"value\":\"yes\"}]}\n  ],\n  \"actions\":[\"show\",\"require\"]\n}\n", "logicApplyTo": "self" }];
 
         const $root = window.jQuery('#render');
-        $root.formRender({ formData });    // 1) render
-        setup($root[0], formData);         // 2) hydrate + bind
+        $root.formRender({ formData });      // 1) render
+
+        // Plain-JS change logger (no TS "as" here)
+        document.getElementById('render').addEventListener('change', (e) => {
+            const t = e.target;
+            console.log('[demo] change:', t && t.name, '→', t && t.value, 'checked?', t && t.checked);
+        }, true);
+
+        const api = setup($root[0], formData);  // 2) hydrate + bind
+        window._fbLogic = api;                  // for console: _fbLogic.refresh()
     </script>
 </body>
 </html>
