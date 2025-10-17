@@ -1,17 +1,27 @@
 /**
  * Builder-side plugin helpers for formBuilder.
- * - withConditionalLogic(): returns a formBuilder options object that injects
- *   typeUserAttrs for 'logic', 'logicGroup', and 'logicApplyTo' and wires an
- *   onOpenFieldEdit callback to group the fields under a single collapsible panel.
- * - attachLogicGroupsManager(): injects a small button + modal to manage form-level groups JSON.
+ * Adds:
+ *  - typeUserAttrs for logic JSON, applyTo, logicGroup
+ *  - onOpenFieldEdit panel that groups these controls
+ *  - Visual Rules Editor (optional) that populates the logic JSON without typing
  */
 
 type UserAttrs = Record<string, any>;
 
+export interface FieldMeta {
+    name: string;
+    type: string;
+    label?: string;
+    values?: Array<{ label: string; value: string }>;
+}
+
 export interface BuilderInitOptions {
     panelTitle?: string;
-    // list of formBuilder field types to extend; default covers common types
     types?: string[];
+    // Hooks to supply fields/values (generic); if omitted, we try to infer from builder JSON.
+    getAvailableFields?: () => FieldMeta[];
+    getFieldValues?: (fieldName: string) => Array<{ label: string; value: string }> | null;
+    enableVisualEditor?: boolean; // default true
 }
 
 const DEFAULT_TYPES = [
@@ -20,17 +30,11 @@ const DEFAULT_TYPES = [
     'date', 'paragraph', 'header', 'file', 'autocomplete'
 ];
 
-/**
- * Use like:
- *   const fb = $('.build-wrap').formBuilder({
- *     ...withConditionalLogic({ panelTitle: 'Conditional Logic' })
- *   });
- */
 export function withConditionalLogic(opts: BuilderInitOptions = {}) {
     const panelTitle = opts.panelTitle || 'Conditional Logic';
     const types = (opts.types && opts.types.length ? opts.types : DEFAULT_TYPES);
+    const enableVE = opts.enableVisualEditor !== false;
 
-    // Build typeUserAttrs for target types
     const typeUserAttrs: Record<string, UserAttrs> = {};
     types.forEach(t => {
         typeUserAttrs[t] = {
@@ -59,9 +63,229 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
         };
     });
 
-    // Group our three attrs into an accordion section in the edit panel
+    function inferFieldsFromBuilderJson(): FieldMeta[] {
+        try {
+            // formBuilder exposes the active instance via jQuery selection; we can sniff current JSON if needed.
+            const stage = (window as any).jQuery?.('.build-wrap');
+            const inst = stage?.data('formBuilder');
+            const json = inst?.actions?.getData?.('json');
+            const arr = typeof json === 'string' ? JSON.parse(json) : Array.isArray(json) ? json : [];
+            return arr.filter((f: any) => f?.name).map((f: any) => ({
+                name: f.name,
+                type: f.type,
+                label: f.label,
+                values: Array.isArray(f.values) ? f.values.map((v: any) => ({ label: v.label ?? v.value, value: v.value })) : undefined
+            }));
+        } catch { return []; }
+    }
+
+    function getFields(): FieldMeta[] {
+        try {
+            const custom = opts.getAvailableFields?.();
+            if (custom && custom.length) return custom;
+        } catch { }
+        return inferFieldsFromBuilderJson();
+    }
+
+    function getValuesFor(fieldName: string): Array<{ label: string; value: string }> | null {
+        try {
+            const custom = opts.getFieldValues?.(fieldName);
+            if (custom) return custom;
+        } catch { }
+        const fm = getFields().find(f => f.name === fieldName);
+        return fm?.values ?? null;
+    }
+
+    function makeVE(htmlParent: HTMLElement, getTextArea: () => HTMLTextAreaElement, getApplyTo: () => HTMLSelectElement, getGroupId: () => HTMLInputElement) {
+        // container
+        const ve = document.createElement('div');
+        ve.className = 'fb-logic-ve';
+        ve.style.border = '1px dashed #cbd5e1';
+        ve.style.padding = '8px';
+        ve.style.marginBottom = '8px';
+
+        // header + help
+        const hdr = document.createElement('div');
+        hdr.innerHTML = `<strong>Visual Rules Editor</strong> <span style="font-size:12px;opacity:.7">(no JSON typing)</span>`;
+        ve.appendChild(hdr);
+
+        // mode
+        const modeWrap = document.createElement('div');
+        modeWrap.style.margin = '6px 0';
+        modeWrap.innerHTML = `
+      <label style="margin-right:8px;">Mode</label>
+      <select class="ve-mode form-select form-select-sm" style="display:inline-block; width:auto;">
+        <option value="any">ANY (OR)</option>
+        <option value="all">ALL (AND)</option>
+      </select>
+    `;
+        ve.appendChild(modeWrap);
+
+        // actions
+        const actionsWrap = document.createElement('div');
+        actionsWrap.style.margin = '6px 0';
+        actionsWrap.innerHTML = `
+      <label style="margin-right:8px;">Actions</label>
+      <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="show" checked> <span class="form-check-label">show</span></label>
+      <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="require"> <span class="form-check-label">require</span></label>
+      <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="enable"> <span class="form-check-label">enable</span></label>
+      <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="disable"> <span class="form-check-label">disable</span></label>
+      <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="hide"> <span class="form-check-label">hide</span></label>
+    `;
+        ve.appendChild(actionsWrap);
+
+        // rules table
+        const rules = document.createElement('div');
+        ve.appendChild(rules);
+
+        const addBtn = document.createElement('button');
+        addBtn.type = 'button';
+        addBtn.className = 'btn btn-sm btn-outline-primary';
+        addBtn.textContent = 'Add rule';
+        addBtn.style.marginTop = '8px';
+        ve.appendChild(addBtn);
+
+        function row(field?: string, op?: string, value?: string) {
+            const row = document.createElement('div');
+            row.className = 've-row';
+            row.style.display = 'grid';
+            row.style.gridTemplateColumns = '1fr 1fr 1fr auto';
+            row.style.gap = '6px';
+            row.style.marginTop = '6px';
+
+            // field select
+            const fSel = document.createElement('select');
+            fSel.className = 'form-select form-select-sm ve-field';
+            getFields().forEach(f => {
+                const opt = document.createElement('option');
+                opt.value = f.name;
+                opt.textContent = f.label ? `${f.label} (${f.name})` : f.name;
+                fSel.appendChild(opt);
+            });
+            if (field) fSel.value = field;
+
+            // operator
+            const oSel = document.createElement('select');
+            oSel.className = 'form-select form-select-sm ve-op';
+
+            function setOpsForField(fn: string) {
+                const fm = getFields().find(f => f.name === fn);
+                const isNum = fm?.type === 'number';
+                const isChoice = fm?.type === 'radio-group' || fm?.type === 'select' || fm?.values?.length;
+                const ops = isNum
+                    ? ['equals', 'notEquals', 'gt', 'gte', 'lt', 'lte', 'isEmpty', 'notEmpty']
+                    : isChoice
+                        ? ['equals', 'notEquals', 'isEmpty', 'notEmpty']
+                        : ['equals', 'notEquals', 'contains', 'startsWith', 'endsWith', 'isEmpty', 'notEmpty'];
+                oSel.innerHTML = '';
+                ops.forEach(o => {
+                    const opt = document.createElement('option');
+                    opt.value = o;
+                    opt.textContent = o;
+                    oSel.appendChild(opt);
+                });
+            }
+
+            setOpsForField(fSel.value);
+            if (op) oSel.value = op;
+
+            // value control (select or input)
+            const vWrap = document.createElement('div');
+            vWrap.className = 've-value-wrap';
+
+            function renderValueControl(fn: string, current?: string) {
+                vWrap.innerHTML = '';
+                const choices = getValuesFor(fn);
+                if (choices && choices.length) {
+                    const s = document.createElement('select');
+                    s.className = 'form-select form-select-sm ve-value';
+                    choices.forEach(c => {
+                        const option = document.createElement('option');
+                        option.value = c.value;
+                        option.textContent = c.label ?? c.value;
+                        s.appendChild(option);
+                    });
+                    if (current) s.value = current;
+                    vWrap.appendChild(s);
+                } else {
+                    const i = document.createElement('input');
+                    i.type = 'text';
+                    i.className = 'form-control form-control-sm ve-value';
+                    if (current) i.value = current;
+                    vWrap.appendChild(i);
+                }
+            }
+
+            renderValueControl(fSel.value, value);
+
+            // remove button
+            const rm = document.createElement('button');
+            rm.type = 'button';
+            rm.className = 'btn btn-sm btn-link text-danger';
+            rm.textContent = 'remove';
+
+            // interactions
+            fSel.addEventListener('change', () => {
+                setOpsForField(fSel.value);
+                renderValueControl(fSel.value);
+            });
+            rm.addEventListener('click', () => row.remove());
+
+            // mount
+            row.appendChild(fSel);
+            row.appendChild(oSel);
+            row.appendChild(vWrap);
+            row.appendChild(rm);
+            rules.appendChild(row);
+        }
+
+        addBtn.addEventListener('click', () => row());
+
+        // footer buttons
+        const save = document.createElement('button');
+        save.type = 'button';
+        save.className = 'btn btn-sm btn-primary';
+        save.textContent = 'Save to JSON';
+        save.style.marginTop = '8px';
+        save.style.marginLeft = '8px';
+        ve.appendChild(save);
+
+        save.addEventListener('click', () => {
+            const _mode = (ve.querySelector('.ve-mode') as HTMLSelectElement).value as 'any' | 'all';
+            const _actions = Array.from(ve.querySelectorAll('.ve-act') as NodeListOf<HTMLInputElement>)
+                .filter(i => i.checked).map(i => i.value) as Array<'show' | 'hide' | 'enable' | 'disable' | 'require'>;
+            const ruleRows = Array.from(ve.querySelectorAll('.ve-row'));
+            const rules = ruleRows.map(r => {
+                const f = (r.querySelector('.ve-field') as HTMLSelectElement).value;
+                const o = (r.querySelector('.ve-op') as HTMLSelectElement).value;
+                const valEl = (r.querySelector('.ve-value') as HTMLInputElement | HTMLSelectElement);
+                const v = (valEl as any).value ?? '';
+                return { field: f, op: o as any, value: v };
+            });
+            const cfg = { groups: [{ mode: _mode, rules, actions: _actions }] };
+            (getTextArea()).value = JSON.stringify(cfg, null, 2);
+            alert('Conditional Logic JSON updated.\nTip: you can switch back to Visual to adjust again.');
+        });
+
+        // preload from JSON if exists
+        try {
+            const raw = (getTextArea()).value;
+            if (raw && raw.trim()) {
+                const parsed = JSON.parse(raw);
+                const g = Array.isArray(parsed.groups) ? parsed.groups[0] : null;
+                if (g) {
+                    (ve.querySelector('.ve-mode') as HTMLSelectElement).value = g.mode || 'any';
+                    const acts = new Set((g.actions || []) as string[]);
+                    ve.querySelectorAll('.ve-act').forEach((i: any) => { i.checked = acts.has(i.value); });
+                    (g.rules || []).forEach((r: any) => row(r.field, r.op, r.value));
+                }
+            }
+        } catch { /* ignore */ }
+
+        htmlParent.prepend(ve);
+    }
+
     function onOpenFieldEdit(editPanel: HTMLElement) {
-        // Inputs are already rendered by typeUserAttrs. We just wrap them visually.
         const logicControls = Array.from(
             editPanel.querySelectorAll('[name="logic"], [name="logicApplyTo"], [name="logicGroup"]')
         ) as HTMLElement[];
@@ -93,14 +317,21 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
             const row = el.closest('.form-group') || el.closest('div') || el;
             if (row && row.parentElement !== body) body.appendChild(row as HTMLElement);
         });
+
+        if (enableVE) {
+            const getTextArea = () => body.querySelector('[name="logic"]') as HTMLTextAreaElement;
+            const getApplyTo = () => body.querySelector('[name="logicApplyTo"]') as HTMLSelectElement;
+            const getGroupId = () => body.querySelector('[name="logicGroup"]') as HTMLInputElement;
+            // mount visual editor above the textarea
+            makeVE(body, getTextArea, getApplyTo, getGroupId);
+        }
     }
 
     return { typeUserAttrs, onOpenFieldEdit };
 }
 
 /**
- * Minimal modal to manage form-level logic groups JSON.
- * Call once on your builder page; stores groups on window.fbLogicGroups.
+ * Form-level groups JSON manager (as before)
  */
 export function attachLogicGroupsManager(targetContainer: HTMLElement, initialJson: string = '') {
     const state = { json: initialJson };
