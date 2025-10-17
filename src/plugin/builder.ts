@@ -96,54 +96,71 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
         return fm?.values ?? null;
     }
 
-    function makeVE(htmlParent: HTMLElement, getTextArea: () => HTMLTextAreaElement, getApplyTo: () => HTMLSelectElement, getGroupId: () => HTMLInputElement) {
-        // container
+    function makeVE(
+        htmlParent: HTMLElement,
+        getTextArea: () => HTMLTextAreaElement,
+        getApplyTo: () => HTMLSelectElement,
+        getGroupId: () => HTMLInputElement
+    ) {
+        // outer wrapper
         const ve = document.createElement('div');
         ve.className = 'fb-logic-ve';
-        ve.style.border = '1px dashed #cbd5e1';
-        ve.style.padding = '8px';
         ve.style.marginBottom = '8px';
 
-        // header + help
+        // header (outside the dashed border)
         const hdr = document.createElement('div');
-        hdr.innerHTML = `<strong>Visual Rules Editor</strong> <span style="font-size:12px;opacity:.7">(no JSON typing)</span>`;
+        hdr.className = 'fb-logic-ve-header';
+        hdr.style.marginTop = '0px';
+        hdr.style.fontWeight = '600';
+        hdr.innerHTML = `Visual Rules Editor <span style="font-size:12px;opacity:.7;font-weight:400;">(no JSON typing)</span>`;
         ve.appendChild(hdr);
+
+        // bordered body
+        const veBody = document.createElement('div');
+        veBody.className = 'fb-logic-ve-body';
+        veBody.style.border = '1px dashed #cbd5e1';
+        veBody.style.padding = '8px';
+        veBody.style.marginTop = '6px';
+        ve.appendChild(veBody);
+
+        // ---- contents go inside veBody ----
 
         // mode
         const modeWrap = document.createElement('div');
         modeWrap.style.margin = '6px 0';
         modeWrap.innerHTML = `
-      <label style="margin-right:8px;">Mode</label>
-      <select class="ve-mode form-select form-select-sm" style="display:inline-block; width:auto;">
-        <option value="any">ANY (OR)</option>
-        <option value="all">ALL (AND)</option>
-      </select>
-    `;
-        ve.appendChild(modeWrap);
+    <label style="margin-right:8px;">Mode</label>
+    <select class="ve-mode form-select form-select-sm" style="display:inline-block; width:auto;">
+      <option value="any">ANY (OR)</option>
+      <option value="all">ALL (AND)</option>
+    </select>
+  `;
+        veBody.appendChild(modeWrap);
 
         // actions
         const actionsWrap = document.createElement('div');
         actionsWrap.style.margin = '6px 0';
         actionsWrap.innerHTML = `
-      <label style="margin-right:8px;">Actions</label>
-      <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="show" checked> <span class="form-check-label">show</span></label>
-      <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="require"> <span class="form-check-label">require</span></label>
-      <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="enable"> <span class="form-check-label">enable</span></label>
-      <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="disable"> <span class="form-check-label">disable</span></label>
-      <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="hide"> <span class="form-check-label">hide</span></label>
-    `;
-        ve.appendChild(actionsWrap);
+    <label style="margin-right:8px;">Actions</label>
+    <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="show" checked> <span class="form-check-label">show</span></label>
+    <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="require"> <span class="form-check-label">require</span></label>
+    <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="enable"> <span class="form-check-label">enable</span></label>
+    <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="disable"> <span class="form-check-label">disable</span></label>
+    <label class="form-check form-check-inline"><input class="form-check-input ve-act" type="checkbox" value="hide"> <span class="form-check-label">hide</span></label>
+  `;
+        veBody.appendChild(actionsWrap);
 
-        // rules table
+        // rules container
         const rules = document.createElement('div');
-        ve.appendChild(rules);
+        rules.className = 've-rules';
+        veBody.appendChild(rules);
 
         const addBtn = document.createElement('button');
         addBtn.type = 'button';
         addBtn.className = 'btn btn-sm btn-outline-primary';
         addBtn.textContent = 'Add rule';
         addBtn.style.marginTop = '8px';
-        ve.appendChild(addBtn);
+        veBody.appendChild(addBtn);
 
         function row(field?: string, op?: string, value?: string) {
             const row = document.createElement('div');
@@ -164,14 +181,14 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
             });
             if (field) fSel.value = field;
 
-            // operator
+            // operator select
             const oSel = document.createElement('select');
             oSel.className = 'form-select form-select-sm ve-op';
 
             function setOpsForField(fn: string) {
                 const fm = getFields().find(f => f.name === fn);
                 const isNum = fm?.type === 'number';
-                const isChoice = fm?.type === 'radio-group' || fm?.type === 'select' || fm?.values?.length;
+                const isChoice = fm?.type === 'radio-group' || fm?.type === 'select' || !!fm?.values?.length;
                 const ops = isNum
                     ? ['equals', 'notEquals', 'gt', 'gte', 'lt', 'lte', 'isEmpty', 'notEmpty']
                     : isChoice
@@ -218,7 +235,7 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
 
             renderValueControl(fSel.value, value);
 
-            // remove button
+            // remove btn
             const rm = document.createElement('button');
             rm.type = 'button';
             rm.className = 'btn btn-sm btn-link text-danger';
@@ -241,20 +258,20 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
 
         addBtn.addEventListener('click', () => row());
 
-        // footer buttons
+        // Save button
         const save = document.createElement('button');
         save.type = 'button';
         save.className = 'btn btn-sm btn-primary';
         save.textContent = 'Save to JSON';
         save.style.marginTop = '8px';
         save.style.marginLeft = '8px';
-        ve.appendChild(save);
+        veBody.appendChild(save);
 
         save.addEventListener('click', () => {
-            const _mode = (ve.querySelector('.ve-mode') as HTMLSelectElement).value as 'any' | 'all';
-            const _actions = Array.from(ve.querySelectorAll('.ve-act') as NodeListOf<HTMLInputElement>)
+            const _mode = (veBody.querySelector('.ve-mode') as HTMLSelectElement).value as 'any' | 'all';
+            const _actions = Array.from(veBody.querySelectorAll('.ve-act') as NodeListOf<HTMLInputElement>)
                 .filter(i => i.checked).map(i => i.value) as Array<'show' | 'hide' | 'enable' | 'disable' | 'require'>;
-            const ruleRows = Array.from(ve.querySelectorAll('.ve-row'));
+            const ruleRows = Array.from(veBody.querySelectorAll('.ve-row'));
             const rules = ruleRows.map(r => {
                 const f = (r.querySelector('.ve-field') as HTMLSelectElement).value;
                 const o = (r.querySelector('.ve-op') as HTMLSelectElement).value;
@@ -267,23 +284,25 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
             alert('Conditional Logic JSON updated.\nTip: you can switch back to Visual to adjust again.');
         });
 
-        // preload from JSON if exists
+        // Preload from JSON, if present
         try {
             const raw = (getTextArea()).value;
             if (raw && raw.trim()) {
                 const parsed = JSON.parse(raw);
                 const g = Array.isArray(parsed.groups) ? parsed.groups[0] : null;
                 if (g) {
-                    (ve.querySelector('.ve-mode') as HTMLSelectElement).value = g.mode || 'any';
+                    (veBody.querySelector('.ve-mode') as HTMLSelectElement).value = g.mode || 'any';
                     const acts = new Set((g.actions || []) as string[]);
-                    ve.querySelectorAll('.ve-act').forEach((i: any) => { i.checked = acts.has(i.value); });
+                    veBody.querySelectorAll('.ve-act').forEach((i: any) => { i.checked = acts.has(i.value); });
                     (g.rules || []).forEach((r: any) => row(r.field, r.op, r.value));
                 }
             }
         } catch { /* ignore */ }
 
+        // mount entire VE block
         htmlParent.prepend(ve);
     }
+
 
     function onOpenFieldEdit(editPanel: HTMLElement) {
         const logicControls = Array.from(
@@ -291,6 +310,7 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
         ) as HTMLElement[];
         if (!logicControls.length) return;
 
+        // Ensure the outer Conditional Logic section exists
         let section = editPanel.querySelector('.fb-logic-section') as HTMLElement | null;
         if (!section) {
             section = document.createElement('div');
@@ -313,29 +333,71 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
         }
 
         const body = section!.querySelector('.fb-logic-body') as HTMLElement;
-        logicControls.forEach(el => {
-            const row = el.closest('.form-group') || el.closest('div') || el;
-            if (row && row.parentElement !== body) body.appendChild(row as HTMLElement);
-        });
 
-        // ✅ Only mount Visual Editor once per field edit panel
+        // ---------- Visual Rules Editor (top, only mount once) ----------
         if (enableVE) {
             const getTextArea = () => body.querySelector('[name="logic"]') as HTMLTextAreaElement;
             const getApplyTo = () => body.querySelector('[name="logicApplyTo"]') as HTMLSelectElement;
             const getGroupId = () => body.querySelector('[name="logicGroup"]') as HTMLInputElement;
 
-            // If a VE already exists in this panel, do NOT add another
-            let ve = body.querySelector('.fb-logic-ve');
-            if (!ve) {
-                // Just in case older sessions left dupes, keep first, remove extras
+            // Guard: only one VE
+            if (!body.querySelector('.fb-logic-ve')) {
+                // Clean any legacy dupes (just in case)
                 const dupes = body.querySelectorAll('.fb-logic-ve');
-                if (dupes.length > 1) {
-                    dupes.forEach((el, idx) => { if (idx > 0) el.remove(); });
-                }
+                if (dupes.length > 1) dupes.forEach((el, idx) => { if (idx > 0) el.remove(); });
+
                 makeVE(body, getTextArea, getApplyTo, getGroupId);
             }
         }
+
+        // ---------- Advanced (JSON) panel (wrapped + collapsed by default) ----------
+        // Build the advanced container if needed
+        let adv = body.querySelector('.fb-logic-advanced') as HTMLElement | null;
+        if (!adv) {
+            adv = document.createElement('div');
+            adv.className = 'fb-logic-advanced';
+            adv.innerHTML = `
+        <div class="fb-logic-adv-header" style="margin-top:10px; font-weight:600; cursor:pointer;">
+          Advanced (JSON)
+          <span style="font-weight:400; font-size:12px; opacity:.7"> (toggle)</span>
+        </div>
+        <div class="fb-logic-adv-body" style="
+          border:1px dashed #cbd5e1;
+          padding:8px;
+          margin-top:6px;
+          display:none; /* collapsed by default */
+        "></div>
+      `;
+            body.appendChild(adv);
+
+            const advHeader = adv.querySelector('.fb-logic-adv-header') as HTMLElement;
+            const advBody = adv.querySelector('.fb-logic-adv-body') as HTMLElement;
+            advHeader.addEventListener('click', () => {
+                const open = advBody.style.display !== 'none';
+                advBody.style.display = open ? 'none' : '';
+            });
+        }
+
+        // Move the original controls into the Advanced box content
+        const advBody = adv!.querySelector('.fb-logic-adv-body') as HTMLElement;
+        logicControls.forEach(el => {
+            const row = el.closest('.form-group') || el.closest('div') || el;
+            if (row && row.parentElement !== advBody) advBody.appendChild(row as HTMLElement);
+        });
+
+        // Guard: if somehow controls were duplicated by upstream UI reflows, keep one
+        const seen = new Set<string>();
+        advBody.querySelectorAll<HTMLElement>('[name="logic"], [name="logicApplyTo"], [name="logicGroup"]').forEach(ctrl => {
+            const n = ctrl.getAttribute('name')!;
+            if (seen.has(n)) {
+                const dupRow = ctrl.closest('.form-group') || ctrl.closest('div') || ctrl;
+                if (dupRow && dupRow.parentElement === advBody) (dupRow as HTMLElement).remove();
+            } else {
+                seen.add(n);
+            }
+        });
     }
+
 
     return { typeUserAttrs, onOpenFieldEdit };
 }
