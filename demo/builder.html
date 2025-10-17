@@ -38,20 +38,37 @@
     <script type="module">
         import { withConditionalLogic, attachLogicGroupsManager } from '/src/plugin/builder.ts';
 
-        // Quick sanity checks (shows alerts if something fundamental is missing)
-        if (!(window).jQuery) alert('jQuery failed to load');
-        else if (!((window).jQuery.fn && (window).jQuery.fn.formBuilder)) alert('formBuilder plugin failed to load');
-
         const toolbar = document.getElementById('toolbar');
-
-        // Add the Logic Groups modal trigger above the builder
         attachLogicGroupsManager(toolbar);
 
-        // Initialize formBuilder with our Conditional Logic panel on page load
-        const options = withConditionalLogic({ panelTitle: 'Conditional Logic' });
-        const fb = (window).jQuery('.build-wrap').formBuilder(options);
+        let fb; // we'll reference it inside the hooks
+        const options = withConditionalLogic({
+            panelTitle: 'Conditional Logic',
+            enableVisualEditor: true,
+            getAvailableFields: () => {
+                const json = fb.actions.getData('json');
+                const arr = typeof json === 'string' ? JSON.parse(json) : Array.isArray(json) ? json : [];
+                return arr.filter(f => f?.name).map(f => ({
+                    name: f.name,
+                    type: f.type,
+                    label: f.label,
+                    values: Array.isArray(f.values) ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value })) : undefined
+                }));
+            },
+            getFieldValues: (fieldName) => {
+                const json = fb.actions.getData('json');
+                const arr = typeof json === 'string' ? JSON.parse(json) : Array.isArray(json) ? json : [];
+                const f = arr.find(ff => ff?.name === fieldName);
+                if (f && Array.isArray(f.values)) {
+                    return f.values.map(v => ({ label: v.label ?? v.value, value: v.value }));
+                }
+                return null;
+            }
+        });
 
-        // Optional: export to console button
+        fb = (window).jQuery('.build-wrap').formBuilder(options);
+
+        // Export helper
         const exportBtn = document.createElement('button');
         exportBtn.className = 'btn btn-sm btn-outline-secondary ms-2';
         exportBtn.textContent = 'Export JSON to console';
@@ -62,5 +79,6 @@
         };
         toolbar.appendChild(exportBtn);
     </script>
+
 </body>
 </html>
