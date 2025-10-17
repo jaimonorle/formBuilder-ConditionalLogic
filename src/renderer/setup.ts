@@ -5,6 +5,7 @@ declare global {
         fbLogicGroups?: Record<string, LogicGroup>;
         __FB_LOGIC_DEBUG__?: boolean;
         FB_GET_WRAPPER?: (el: HTMLElement) => HTMLElement;
+        _fbLogic?: { refresh: () => void }; // debug handle
     }
 }
 
@@ -24,7 +25,7 @@ function sourceSelector(fieldName: string) {
 }
 
 function defaultWrapper(el: HTMLElement): HTMLElement {
-    const candidates = ['.form-group', '.fb-field-wrapper', '.form-field', '.field-wrapper', '.row'];
+    const candidates = ['.form-group', '.fb-field-wrapper', '.form-field', '.field-wrapper', '.row', '.mb-3', '.box'];
     for (const c of candidates) {
         const found = el.closest(c);
         if (found) return found as HTMLElement;
@@ -108,7 +109,9 @@ function evalGroup(form: HTMLElement, group: LogicGroup): boolean {
         const v = getControlValue(src);
         return testRule(v, rule);
     });
-    return group.mode === 'all' ? results.every(Boolean) : results.some(Boolean);
+    const ok = group.mode === 'all' ? results.every(Boolean) : results.some(Boolean);
+    if (window.__FB_LOGIC_DEBUG__) console.log('[fb-logic] group', group, 'results', results, 'ok?', ok);
+    return ok;
 }
 
 function setDisabled(el: HTMLElement, disabled: boolean) {
@@ -252,6 +255,9 @@ function findTargets(form: HTMLElement): Array<{
         }
     });
 
+    if (window.__FB_LOGIC_DEBUG__) {
+        console.log('[fb-logic] targets found:', targets.length, targets);
+    }
     return targets;
 }
 
@@ -273,6 +279,7 @@ function reeval(form: HTMLElement, targets: ReturnType<typeof findTargets>, opti
         applyActions(wrapper, actions, truthy);
 
         if (options.onState) options.onState(el, truthy);
+        if (window.__FB_LOGIC_DEBUG__) console.log('[fb-logic] applied', { el, mode: t.mode, actions, truthy, wrapper });
     });
 }
 
@@ -292,11 +299,14 @@ export function setup(formEl: HTMLElement | Element, _formData?: any, options: S
 
     const watched = new Set<string>();
     targets.forEach((t) => { t.cfg.groups?.forEach((g) => g.rules.forEach((r) => watched.add(r.field))); });
+    if (window.__FB_LOGIC_DEBUG__) console.log('[fb-logic] watching fields:', Array.from(watched));
 
     const handler = (ev: Event) => {
         const nameAttr = (ev.target as HTMLInputElement)?.name;
         if (!nameAttr) return;
-        if (watched.has(nameAttr) || watched.has(nameAttr.replace(/\[\]$/, ''))) {
+        const simple = nameAttr.replace(/\[\]$/, '');
+        if (watched.has(nameAttr) || watched.has(simple)) {
+            if (window.__FB_LOGIC_DEBUG__) console.log('[fb-logic] change on', nameAttr, '→ reeval');
             reeval(form, targets, options);
         }
     };
@@ -308,13 +318,16 @@ export function setup(formEl: HTMLElement | Element, _formData?: any, options: S
 
     form.addEventListener('fb:reinit-logic' as any, () => reeval(form, targets, options));
 
-    return {
+    const api = {
         refresh: () => reeval(form, targets, options),
         destroy: () => {
             form.removeEventListener('input', handler, true);
             form.removeEventListener('change', handler, true);
         },
     };
+    // expose for quick debugging from console
+    (window as any)._fbLogic = api;
+    return api;
 }
 
 export function refresh(formEl: HTMLElement | Element) {

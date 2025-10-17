@@ -1,59 +1,87 @@
-
 <!doctype html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Render Demo - Conditional Logic</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <style> body { padding: 2rem; } .box { border: 1px dashed #999; padding: 1rem; margin-bottom: 1rem; } </style>
-  </head>
-  <body>
+    <style>
+        body {
+            padding: 2rem;
+        }
+
+        .box {
+            border: 1px dashed #999;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
     <h1>Render Demo</h1>
 
     <form id="demoForm" class="mt-3">
-      <div class="box">
-        <label class="form-label d-block">Do you have a vehicle?</label>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="FormData07" value="yes" id="vehYes">
-          <label class="form-check-label" for="vehYes">Yes</label>
+        <!-- Controller 1: hasVehicle (yes/no) -->
+        <div class="box">
+            <label class="form-label d-block">Do you have a vehicle?</label>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="hasVehicle" value="yes" id="vehYes">
+                <label class="form-check-label" for="vehYes">Yes</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="hasVehicle" value="no" id="vehNo" checked>
+                <label class="form-check-label" for="vehNo">No</label>
+            </div>
         </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="FormData07" value="no" id="vehNo" checked>
-          <label class="form-check-label" for="vehNo">No</label>
-        </div>
-      </div>
 
-      <div class="box" data-logic='{"groups":[{"mode":"any","rules":[{"field":"FormData07","op":"equals","value":"yes"}]}],"actions":["show","require"]}'>
+        <!-- Target group controlled by hasVehicle -->
+        <div class="box"
+             data-logic='{
+             "groups":[
+               {"mode":"any","rules":[{"field":"hasVehicle","op":"equals","value":"yes"}]}
+             ],
+             "actions":["show","require"]
+           }'>
+            <div class="mb-3">
+                <label class="form-label">Vehicle Make</label>
+                <input class="form-control" type="text" name="vehicleMake" placeholder="e.g., Toyota">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Vehicle Model</label>
+                <input class="form-control" type="text" name="vehicleModel" placeholder="e.g., Yaris">
+            </div>
+        </div>
+
+        <!-- Controller 2: country -->
         <div class="mb-3">
-          <label class="form-label">Vehicle Make</label>
-          <input class="form-control" type="text" name="FormData08" placeholder="e.g., Toyota">
+            <label class="form-label">Country</label>
+            <select class="form-select" name="country">
+                <option value="">Select...</option>
+                <option value="Dominica">Dominica</option>
+                <option value="Barbados">Barbados</option>
+                <option value="Trinidad">Trinidad</option>
+            </select>
         </div>
+
+        <!-- Target field controlled by country -->
         <div class="mb-3">
-          <label class="form-label">Vehicle Model</label>
-          <input class="form-control" type="text" name="FormData09" placeholder="e.g., Yaris">
+            <label class="form-label">State/Parish</label>
+            <input class="form-control"
+                   name="state"
+                   placeholder="Enter your state/parish"
+                   data-logic='{
+                 "groups":[
+                   {"mode":"any","rules":[{"field":"country","op":"notEmpty"}]}
+                 ],
+                 "actions":["show"]
+               }' />
         </div>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Primary City</label>
-        <select class="form-select" name="city">
-          <option value="">Select...</option>
-          <option value="Roseau">Roseau</option>
-          <option value="Portsmouth">Portsmouth</option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label">Neighborhood</label>
-        <input class="form-control" name="neighborhood" data-logic='{"groups":[{"mode":"all","rules":[{"field":"city","op":"equals","value":"Roseau"}]}],"actions":["show"]}' />
-      </div>
     </form>
 
     <script type="module">
-      import { setup } from '/src/renderer/setup.ts';
-      setup(document.getElementById('demoForm'));
+        import { setup } from '/src/renderer/setup.ts';
+        setup(document.getElementById('demoForm'));
     </script>
-  </body>
+</body>
 </html>
