@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Builder-side plugin helpers for formBuilder.
  * Adds:
  *  - typeUserAttrs for logic JSON, applyTo, logicGroup
@@ -318,12 +318,22 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
             if (row && row.parentElement !== body) body.appendChild(row as HTMLElement);
         });
 
+        // ✅ Only mount Visual Editor once per field edit panel
         if (enableVE) {
             const getTextArea = () => body.querySelector('[name="logic"]') as HTMLTextAreaElement;
             const getApplyTo = () => body.querySelector('[name="logicApplyTo"]') as HTMLSelectElement;
             const getGroupId = () => body.querySelector('[name="logicGroup"]') as HTMLInputElement;
-            // mount visual editor above the textarea
-            makeVE(body, getTextArea, getApplyTo, getGroupId);
+
+            // If a VE already exists in this panel, do NOT add another
+            let ve = body.querySelector('.fb-logic-ve');
+            if (!ve) {
+                // Just in case older sessions left dupes, keep first, remove extras
+                const dupes = body.querySelectorAll('.fb-logic-ve');
+                if (dupes.length > 1) {
+                    dupes.forEach((el, idx) => { if (idx > 0) el.remove(); });
+                }
+                makeVE(body, getTextArea, getApplyTo, getGroupId);
+            }
         }
     }
 
