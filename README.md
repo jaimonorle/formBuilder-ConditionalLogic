@@ -1,18 +1,25 @@
-﻿# formBuilder-ConditionalLogic
+﻿# README.md
 
-A plugin-quality toolkit that adds **Conditional Logic** to [formBuilder](https://github.com/kevinchappell/formBuilder).
+[![DCO](https://img.shields.io/badge/DCO-1.1-blue.svg)](https://developercertificate.org/)
 
-* Works with your existing **formBuilder → formRender** flow
+A lightweight, name‑based **Conditional Logic** toolkit for [formBuilder](https://github.com/kevinchappell/formBuilder). Add show/hide/require/enable/disable behaviors to fields and containers without writing custom code.
+
+* **Works with your existing formBuilder → formRender flow**
 * **Renderer** evaluates rules after `formRender()` and toggles fields/containers
-* **Builder panel** to attach logic per field (JSON / ApplyTo / Group)
-* Optional **Logic Groups** you can reuse across multiple targets
-* **Name-based** binding: works with your own names (e.g., `hasVehicle`, `FormData12`, `city`)
+* **Builder UI** adds a **Visual Rules Editor** to each field (no JSON typing)
+* **Logic Groups (GUI)** define reusable rule groups in a toolbar modal
+* **Name‑based** rules: `hasVehicle`, `FormData12`, `city`, etc. (no class hacks)
 
-> Tip: For a quick sanity test, open `demo/render.html` (static `data-logic` attributes). For end‑to‑end (builder JSON → render → logic), open `demo/composed.html`.
+> **Demos**: Static UMD pages (work on any static host)
+>
+> * `demo/builder-static.html` — drag fields, open **Conditional Logic** panel, save
+> * `demo/render-static.html` — quick smoke test with `data-logic` attributes
 
 ---
 
-## Install / Dev
+## Installation
+
+### ESM (Dev via Vite)
 
 ```bash
 npm install
@@ -20,227 +27,195 @@ npm run dev
 # open http://localhost:5173/demo/builder.html
 ```
 
-Build:
+### UMD (Static / CDN / GitHub Pages)
+
+1. Build once:
 
 ```bash
 npm run build
-# outputs ./dist/formbuilder-conditional-logic.es.js and .umd.cjs
+```
+
+2. Serve `dist/` + `demo/*-static.html` from any static host.
+
+```html
+<!-- UMD global -->
+<script src="/dist/formbuilder-conditional-logic.umd.cjs"></script>
 ```
 
 ---
 
-## Quick Usage (Render side)
+## Quick Start
+
+### Render‑only (HTML with `data-logic`)
 
 ```html
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="/vendor/form-render.min.js"></script>
-<script src="/dist/formbuilder-conditional-logic.umd.cjs"></script>
+<form id="demo">
+  <div>
+    <label>Do you have a vehicle?</label>
+    <label><input type="radio" name="hasVehicle" value="yes"> Yes</label>
+    <label><input type="radio" name="hasVehicle" value="no" checked> No</label>
+  </div>
 
-<div id="render"></div>
+  <div data-logic='{"groups":[{"mode":"any","rules":[{"field":"hasVehicle","op":"equals","value":"yes"}]}],"actions":["show","require"]}'>
+    <input name="vehicleMake" placeholder="Vehicle Make"/>
+    <input name="vehicleModel" placeholder="Vehicle Model"/>
+  </div>
+</form>
+
 <script>
-  // Assume "formData" is your saved builder JSON (array of fields)
-  const $root = $('#render');
-  $root.formRender({ formData });
-
-  // Hydrate builder JSON → data-* attributes, then bind logic
-  FBConditionalLogic.setup($root[0], formData);
+  const { setup } = window.FBConditionalLogic; // from UMD bundle
+  setup(document.getElementById('demo'));
 </script>
 ```
 
-**You can also declare logic directly in HTML** (useful for quick tests):
+### Builder integration (Visual panel + Groups)
 
 ```html
-<div data-logic='{
-  "groups":[{"mode":"any","rules":[{"field":"hasVehicle","op":"equals","value":"yes"}]}],
-  "actions":["show","require"]
-}'>
-  <input name="vehicleMake">
-  <input name="vehicleModel">
-</div>
+<!-- jQuery + jQuery UI + formBuilder -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/formBuilder@3.21.1/dist/form-builder.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/formBuilder@3.21.1/dist/form-render.min.js"></script>
+
+<!-- UMD bundle -->
+<script src="/dist/formbuilder-conditional-logic.umd.cjs"></script>
+<script>
+  const { withConditionalLogic, attachLogicGroupsManager } = window.FBConditionalLogic.builder;
+
+  const toolbar = document.getElementById('toolbar');
+  let fb;
+  const getFormArray = () => {
+    const data = fb?.actions?.getData?.('json');
+    return typeof data === 'string' ? JSON.parse(data) : (Array.isArray(data) ? data : []);
+  };
+  const getAvailableFields = () => getFormArray().filter(f => f?.name).map(f => ({
+    name: f.name, type: f.type, label: f.label,
+    values: Array.isArray(f.values) ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value })) : undefined
+  }));
+  const getFieldValues = (fieldName) => {
+    const f = getFormArray().find(ff => ff?.name === fieldName);
+    return Array.isArray(f?.values) ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value })) : null;
+  };
+
+  const options = withConditionalLogic({
+    panelTitle: 'Conditional Logic',
+    enableVisualEditor: true,
+    getAvailableFields,
+    getFieldValues
+  });
+  fb = window.jQuery('.build-wrap').formBuilder(options);
+
+  attachLogicGroupsManager(toolbar, { getAvailableFields, getFieldValues });
+</script>
 ```
 
 ---
 
-## Builder Side (panel + groups)
-
-```js
-import { withConditionalLogic, attachLogicGroupsManager } from 'formbuilder-conditional-logic/builder';
-
-// Optional toolbar button to edit form-level groups (saved to window.fbLogicGroups for now)
-attachLogicGroupsManager(document.getElementById('fb-toolbar'));
-
-const options = withConditionalLogic({ panelTitle: 'Conditional Logic' });
-const fb = $('.build-wrap').formBuilder(options);
-```
-
-What you get in the field edit panel:
-
-* **Conditional Logic (JSON)** textarea
-* **Apply To**: `This Field` / `Field Container` / `Logic Group`
-* **Group ID**: enter a group key if using groups
-
-**Logic Groups** modal (toolbar button):
-
-Define JSON like:
-
-```json
-{
-  "vehicleDetails": {
-    "mode": "any",
-    "rules": [{ "field": "hasVehicle", "op": "equals", "value": "yes" }],
-    "actions": ["show","require"]
-  }
-}
-```
-
-Then, on targets set **Apply To: Logic Group** and **Group ID: `vehicleDetails`**.
-
----
-
-## Rule Model
+## Concepts & Data Model
 
 ```ts
-// Operators
-// - Text: equals, notEquals, contains, startsWith, endsWith, isEmpty, notEmpty
-// - Number: equals, notEquals, gt, gte, lt, lte, isEmpty, notEmpty
-// - Choice (radio/select): equals, notEquals, isEmpty, notEmpty
-
-type Op =
-  | 'equals' | 'notEquals'
-  | 'contains' | 'startsWith' | 'endsWith'
-  | 'gt' | 'gte' | 'lt' | 'lte'
-  | 'isEmpty' | 'notEmpty';
-
-interface Rule { field: string; op: Op; value?: any; }
-
-interface LogicGroup {
-  mode: 'any' | 'all';
-  rules: Rule[];
-  actions: Array<'show'|'hide'|'enable'|'disable'|'require'>;
-}
-
-interface LogicConfig {
-  groups: LogicGroup[];
-  actions?: LogicGroup['actions']; // default ['show']
-  applyTo?: 'self' | 'container' | 'group';
-  logicGroup?: string;             // when applyTo === 'group'
-}
+export type Action = 'show' | 'hide' | 'enable' | 'disable' | 'require';
+export type Op = 'equals' | 'notEquals' | 'contains' | 'startsWith' | 'endsWith' | 'gt' | 'gte' | 'lt' | 'lte' | 'isEmpty' | 'notEmpty';
+export interface Rule { field: string; op: Op; value?: any; }
+export interface LogicGroup { mode: 'any' | 'all'; rules: Rule[]; actions: Action[]; }
+export interface LogicConfig { groups: LogicGroup[]; actions?: Action[]; applyTo?: 'self'|'container'|'group'; logicGroup?: string; }
 ```
 
-**Behavior notes:**
+* A **Rule** reads the value of a field by its **name**.
+* A **LogicGroup** evaluates rules in **ANY** (OR) or **ALL** (AND) mode and emits `true/false`.
+* **Actions** run when the group evaluates **true** (`show`, `require`, etc.).
+* A **LogicConfig** can be attached to a field element (`data-logic`), its wrapper (`data-logic-container`), or reference a named **Logic Group** (`data-logic-group="groupId"`).
 
-* Each `group` computes to true/false; multiple groups on one target are **AND**‑ed (all must be true) before actions apply.
-* `actions` interpret truthiness:
+**Apply To** (Builder UI):
 
-  * `show` → show when true
-  * `hide` → hide when true
-  * `require` → mark inputs required when shown
-  * `enable` / `disable` → toggle `disabled`
-
----
-
-## Demos
-
-* **`/demo/builder.html`** — drag fields, open the **Conditional Logic** panel, and export JSON
-* **`/demo/composed.html`** — paste builder JSON into `formData` and see it toggle
-* **`/demo/render.html`** — static attributes (`data-logic`, etc.) for quick smoke tests
+* **This Field** → toggles the nearest wrapper
+* **Field Container** → attaches to the wrapper node
+* **Logic Group** → references a shared group defined in the Groups modal
 
 ---
 
-## Notes / Gotchas
+## Renderer API
 
-* **Match your controller values** exactly. If `hasVehicle` radios use values `"option-1"/"option-2"`, your rule must use those exact strings—not the labels.
+```ts
+import { setup } from 'formbuilder-conditional-logic/renderer';
 
-* If you rename or inject elements **after** rendering, dispatch a reinit:
+setup(formEl: HTMLElement, formData?: any, options?: {
+  getValue?: (el: HTMLElement) => any;
+  getWrapper?: (el: HTMLElement) => HTMLElement;
+  onState?: (el: HTMLElement, visible: boolean) => void;
+});
+```
 
-  ```js
-  document.getElementById('render').dispatchEvent(new Event('fb:reinit-logic'));
-  ```
+* **`setup(formEl, formData?)`** hydrates builder JSON into `data-logic*` attributes (when provided) and binds listeners. Returns `{ refresh(), destroy() }`.
+* **`refresh()`** re‑evaluates all targets.
+* **Custom wrappers**: provide `getWrapper(el)` if your markup differs.
+* **Reinit** after DOM changes: `formEl.dispatchEvent(new Event('fb:reinit-logic'))`.
 
-* Override wrapper resolution globally if your markup differs:
+---
 
-  ```js
-  window.FB_GET_WRAPPER = (el) => el.closest('.your-wrapper') || el.parentElement;
-  ```
+## Builder API
 
-* The dev‑server 404 for `assets/lang/en-US.lang` is harmless (formRender tries to load i18n by default).
+```ts
+import { withConditionalLogic, attachLogicGroupsManager } from 'formbuilder-conditional-logic/builder';
+
+const fb = $('.build-wrap').formBuilder(
+  withConditionalLogic({
+    panelTitle: 'Conditional Logic',
+    enableVisualEditor: true,
+    getAvailableFields: () => FieldMeta[],
+    getFieldValues: (fieldName) => {label:string, value:string}[] | null
+  })
+);
+
+attachLogicGroupsManager(toolbarEl, { getAvailableFields, getFieldValues });
+```
+
+* **Visual Rules Editor** writes JSON to the field’s `logic` textarea (Advanced panel is collapsed by default).
+* **Logic Groups (GUI)** saves to `window.fbLogicGroups` and mirrors JSON in its Advanced panel.
+
+---
+
+## Browser & Compatibility
+
+* Tested with **formBuilder 3.21.1**, **jQuery 3.7+**, **jQuery UI 1.13+**
+* Modern browsers; IE not supported.
 
 ---
 
 ## Roadmap
 
-* **Visual Rules Editor** in the builder (no-JSON UI: pick field → operator → value, choose actions)
-* Persist `logicGroups` **inside** the form JSON (not just `window.fbLogicGroups`)
-* Unit tests (Vitest): rule ops, group modes, wrapper resolution
+* Persist Groups inside exported form JSON
+* Visual editor for compound groups (multiple groups per target)
+* Unit tests (Vitest) and CI
 
 ---
 
-### Visual Rules Editor (v0.2.0)
+### DCO: sign-off required
 
-Enable the no-JSON editor in the builder panel. It auto-lists fields from your form and (for radio/select) their option values.
+We follow the **Developer Certificate of Origin**. Please sign off your commits.
 
-```js
-import { withConditionalLogic } from 'formbuilder-conditional-logic/builder';
+```bash
+# set your real name and email once (must match sign-off)
+git config user.name  "Your Real Name"
+git config user.email "you@example.com"
 
-const fb = $('.build-wrap').formBuilder({
-  ...withConditionalLogic({
-    enableVisualEditor: true,
-    getAvailableFields: () => {
-      const data = fb.actions.getData('json');
-      const arr = typeof data === 'string' ? JSON.parse(data) : data;
-      return arr.filter(f => f?.name).map(f => ({
-        name: f.name, type: f.type, label: f.label,
-        values: Array.isArray(f.values) ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value })) : undefined
-      }));
-    },
-    getFieldValues: (fieldName) => {
-      const data = fb.actions.getData('json');
-      const arr = typeof data === 'string' ? JSON.parse(data) : data;
-      const f = arr.find(x => x?.name === fieldName);
-      return f?.values ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value })) : null;
-    }
-  })
-});
+# sign off a new commit
+git commit -s -m "feat: add Visual Groups Editor"
 
+# if you forgot, amend the last commit
+git commit --amend -s --no-edit
+# then push safely
+git push --force-with-lease
 ```
 
+Read more: [https://developercertificate.org/](https://developercertificate.org/)
 
-### Visual Groups Editor (GUI) — v0.2.x
+## Acknowledgements
 
-Use the toolbar **Logic Groups** button to define reusable groups without writing JSON.
-
-```js
-import { withConditionalLogic, attachLogicGroupsManager } from 'formbuilder-conditional-logic/builder';
-
-let fb;
-const options = withConditionalLogic({
-  enableVisualEditor: true,
-  getAvailableFields: () => {
-    const data = fb.actions.getData('json');
-    const arr = typeof data === 'string' ? JSON.parse(data) : data;
-    return arr.filter(f => f?.name).map(f => ({
-      name: f.name, type: f.type, label: f.label,
-      values: Array.isArray(f.values) ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value })) : undefined
-    }));
-  },
-  getFieldValues: (fieldName) => {
-    const data = fb.actions.getData('json');
-    const arr = typeof data === 'string' ? JSON.parse(data) : data;
-    const f = arr.find(x => x?.name === fieldName);
-    return f?.values ? f.values.map(v => ({ label: v.label ?? v.value, value: v.value })) : null;
-  }
-});
-
-fb = $('.build-wrap').formBuilder(options);
-
-// NEW: GUI Groups manager wired with the same hooks
-attachLogicGroupsManager(document.getElementById('fb-toolbar'), {
-  getAvailableFields: options.getAvailableFields,
-  getFieldValues: options.getFieldValues
-});
-
-```
+* Inspired by community demand and prior work like **formbuilder_depends**.
 
 ## License
 
-MIT
+MIT © 2025 Jaimon Orlé
+
+---
