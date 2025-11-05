@@ -1,6 +1,16 @@
-﻿# README.md
+﻿# formBuilder-ConditionalLogic
 
 [![DCO](https://img.shields.io/badge/DCO-1.1-blue.svg)](https://developercertificate.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/jaimonorle/formBuilder-ConditionalLogic?display_name=tag)](https://github.com/jaimonorle/formBuilder-ConditionalLogic/releases)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-orange.svg)](https://www.conventionalcommits.org/)
+[![Pages](https://github.com/jaimonorle/formBuilder-ConditionalLogic/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/jaimonorle/formBuilder-ConditionalLogic/actions/workflows/gh-pages.yml)
+[![Builder Demo](https://img.shields.io/badge/demo-Builder%20Demo-blue.svg)](https://jaimonorle.github.io/formBuilder-ConditionalLogic/demo/builder-static.html)
+[![Render Demo](https://img.shields.io/badge/demo-Render%20Demo-blue.svg)](https://jaimonorle.github.io/formBuilder-ConditionalLogic/demo/render-static.html)
+
+**Quick Links:** [Quick Start](#quick-start) · [Demos](#installation) · [Renderer API](#renderer-api) · [Builder API](#builder-api) · [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Changelog](CHANGELOG.md) · [Security](SECURITY.md) · [License](LICENSE)
+
 
 A lightweight, name‑based **Conditional Logic** toolkit for [formBuilder](https://github.com/kevinchappell/formBuilder). Add show/hide/require/enable/disable behaviors to fields and containers without writing custom code.
 
@@ -190,29 +200,15 @@ attachLogicGroupsManager(toolbarEl, { getAvailableFields, getFieldValues });
 
 ---
 
-### DCO: sign-off required
+## Contributing
 
-We follow the **Developer Certificate of Origin**. Please sign off your commits.
+We welcome PRs! Please read [CONTRIBUTING.md](CONTRIBUTING.md) and sign off your commits per the [DCO](https://developercertificate.org/).
+Also see our [Code of Conduct](CODE_OF_CONDUCT.md), [Security policy](SECURITY.md), and [Changelog](CHANGELOG.md).
 
-```bash
-# set your real name and email once (must match sign-off)
-git config user.name  "Your Real Name"
-git config user.email "you@example.com"
-
-# sign off a new commit
-git commit -s -m "feat: add Visual Groups Editor"
-
-# if you forgot, amend the last commit
-git commit --amend -s --no-edit
-# then push safely
-git push --force-with-lease
-```
-
-Read more: [https://developercertificate.org/](https://developercertificate.org/)
 
 ## Acknowledgements
 
-* Inspired by community demand and prior work like **formbuilder_depends**.
+* Inspired by community demand and prior work like [**formbuilder_depends**](https://github.com/rendezz/formbuilder_depends).
 
 ## License
 

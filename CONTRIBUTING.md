@@ -1,4 +1,4 @@
-﻿# CONTRIBUTING.md
+﻿# Contributing
 
 Thanks for considering a contribution! 🙌 This project welcomes fixes, features, docs, and examples.
 
