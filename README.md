@@ -1,10 +1,8 @@
 ﻿# formBuilder-ConditionalLogic
 
-<div align="right">
-    [![Ko-fi](https://img.shields.io/badge/Ko%E2%80%91fi-Support-ff5e5b?logo=kofi&logoColor=white)](https://ko-fi.com/jaimonorle)
-    [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support-ffdd00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/jaimonorle)
-    [![Liberapay](https://img.shields.io/badge/Liberapay-Support-f6c915?logo=liberapay&logoColor=black)](https://liberapay.com/jaimonorle/)
-</div>
+[![Ko-fi](https://img.shields.io/badge/Ko%E2%80%91fi-Support-ff5e5b?logo=kofi&logoColor=white)](https://ko-fi.com/jaimonorle)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support-ffdd00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/jaimonorle)
+[![Liberapay](https://img.shields.io/badge/Liberapay-Support-f6c915?logo=liberapay&logoColor=black)](https://liberapay.com/jaimonorle/)
 
 
 [![DCO](https://img.shields.io/badge/DCO-1.1-blue.svg)](https://developercertificate.org/)
