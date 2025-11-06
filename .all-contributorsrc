@@ -1,0 +1,11 @@
+{
+  "projectName": "formBuilder-ConditionalLogic",
+  "projectOwner": "jaimonorle",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": ["README.md"],
+  "imageSize": 80,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributorsPerLine": 7
+}

@@ -6,6 +6,7 @@
 
 
 [![DCO](https://img.shields.io/badge/DCO-1.1-blue.svg)](https://developercertificate.org/)
+[![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/jaimonorle/formBuilder-ConditionalLogic?display_name=tag)](https://github.com/jaimonorle/formBuilder-ConditionalLogic/releases)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
@@ -14,7 +15,7 @@
 [![Builder Demo](https://img.shields.io/badge/demo-Builder%20Demo-blue.svg)](https://jaimonorle.github.io/formBuilder-ConditionalLogic/demo/builder-static.html)
 [![Render Demo](https://img.shields.io/badge/demo-Render%20Demo-blue.svg)](https://jaimonorle.github.io/formBuilder-ConditionalLogic/demo/render-static.html)
 
-**Quick Links:** [Quick Start](#quick-start) · [Demos](#installation) · [Renderer API](#renderer-api) · [Builder API](#builder-api) · [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Changelog](CHANGELOG.md) · [Security](SECURITY.md) · [License](LICENSE)
+**Quick Links:** [Quick Start](#quick-start) · [Live Demos](#live-demos) · [Renderer API](#renderer-api) · [Builder API](#builder-api) · [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Changelog](CHANGELOG.md) · [Security](SECURITY.md) · [License](LICENSE)
 
 
 A lightweight, name‑based **Conditional Logic** toolkit for [formBuilder](https://github.com/kevinchappell/formBuilder). Add show/hide/require/enable/disable behaviors to fields and containers without writing custom code.
@@ -25,10 +26,13 @@ A lightweight, name‑based **Conditional Logic** toolkit for [formBuilder](http
 * **Logic Groups (GUI)** define reusable rule groups in a toolbar modal
 * **Name‑based** rules: `hasVehicle`, `FormData12`, `city`, etc. (no class hacks)
 
-> **Demos**: Static UMD pages (work on any static host)
->
-> * `demo/builder-static.html` — drag fields, open **Conditional Logic** panel, save
-> * `demo/render-static.html` — quick smoke test with `data-logic` attributes
+## Live Demos
+
+- **Builder Demo** → https://jaimonorle.github.io/formBuilder-ConditionalLogic/demo/builder-static.html  
+  Drag fields, open **Conditional Logic** panel, use Visual Rules Editor or Advanced JSON.
+- **Render Demo** → https://jaimonorle.github.io/formBuilder-ConditionalLogic/demo/render-static.html  
+  Minimal form demonstrating `data-logic` attributes in action.
+
 
 ---
 
@@ -44,17 +48,26 @@ npm run dev
 
 ### UMD (Static / CDN / GitHub Pages)
 
-1. Build once:
+**Option 1 — use the built bundle from this repo**
 
 ```bash
 npm run build
+# serve /dist and /demo/*-static.html from any static host
 ```
 
-2. Serve `dist/` + `demo/*-static.html` from any static host.
+```html
+<!-- UMD global (from your repo/dist) -->
+<script src="/dist/formbuilder-conditional-logic.umd.cjs"></script>
+```
+
+**Option 2 — load from jsDelivr (CDN)**
 
 ```html
-<!-- UMD global -->
-<script src="/dist/formbuilder-conditional-logic.umd.cjs"></script>
+<!-- Stable by tag -->
+<script src="https://cdn.jsdelivr.net/gh/jaimonorle/formBuilder-ConditionalLogic@v0.2.2/dist/formbuilder-conditional-logic.umd.cjs"></script>
+
+<!-- Or always latest (less stable) -->
+<script src="https://cdn.jsdelivr.net/gh/jaimonorle/formBuilder-ConditionalLogic/dist/formbuilder-conditional-logic.umd.cjs"></script>
 ```
 
 ---
@@ -217,9 +230,27 @@ If this project helps you, consider supporting:
 
 ## Contributing
 
-We welcome PRs! Please read [CONTRIBUTING.md](CONTRIBUTING.md) and sign off your commits per the [DCO](https://developercertificate.org/).
-Also see our [Code of Conduct](CODE_OF_CONDUCT.md), [Security policy](SECURITY.md), and [Changelog](CHANGELOG.md).
+We welcome PRs! Please read [CONTRIBUTING.md](CONTRIBUTING.md) and sign off your commits per the [DCO](https://developercertificate.org/). Also see our [Code of Conduct](CODE_OF_CONDUCT.md), [Security policy](SECURITY.md), and [Changelog](CHANGELOG.md).
 
+This project uses the **all-contributors** spec to recognize **code and non-code** contributions. After your PR lands (or even for design/ideas/testing), we’ll add you with the bot. You can also ask the bot yourself in an issue:
+
+```
+@all-contributors please add @your-username for code,doc,design,ideas
+```
+
+The Contributors table lives below and is managed automatically.
+
+---
+
+## Contributors ✨
+
+Thanks to these wonderful people:
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://allcontributors.org) specification. Contributions of any kind welcome!
 
 ## Acknowledgements
 
