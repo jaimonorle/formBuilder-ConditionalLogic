@@ -3,9 +3,29 @@
   "projectOwner": "jaimonorle",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "files": ["README.md"],
+  "files": [
+    "README.md"
+  ],
   "imageSize": 80,
   "commit": true,
   "commitConvention": "angular",
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "commitType": "docs",
+  "contributors": [
+    {
+      "login": "jaimonorle",
+      "name": "Jaimon Orlé",
+      "avatar_url": "https://avatars.githubusercontent.com/u/209879806?v=4",
+      "profile": "http://orleindustries.com",
+      "contributions": [
+        "code",
+        "doc",
+        "ideas",
+        "maintenance",
+        "infra",
+        "projectManagement",
+        "test"
+      ]
+    }
+  ]
 }
