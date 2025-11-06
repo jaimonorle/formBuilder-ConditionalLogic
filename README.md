@@ -1,5 +1,12 @@
 ﻿# formBuilder-ConditionalLogic
 
+<div align="right">
+    [![Ko-fi](https://img.shields.io/badge/Ko%E2%80%91fi-Support-ff5e5b?logo=kofi&logoColor=white)](https://ko-fi.com/jaimonorle)
+    [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Support-ffdd00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/jaimonorle)
+    [![Liberapay](https://img.shields.io/badge/Liberapay-Support-f6c915?logo=liberapay&logoColor=black)](https://liberapay.com/jaimonorle/)
+</div>
+
+
 [![DCO](https://img.shields.io/badge/DCO-1.1-blue.svg)](https://developercertificate.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/jaimonorle/formBuilder-ConditionalLogic?display_name=tag)](https://github.com/jaimonorle/formBuilder-ConditionalLogic/releases)
@@ -197,6 +204,16 @@ attachLogicGroupsManager(toolbarEl, { getAvailableFields, getFieldValues });
 * Persist Groups inside exported form JSON
 * Visual editor for compound groups (multiple groups per target)
 * Unit tests (Vitest) and CI
+
+---
+
+## 💖 Support my work
+
+If this project helps you, consider supporting:
+
+- Ko-fi: https://ko-fi.com/jaimonorle
+- Buy Me a Coffee: https://buymeacoffee.com/jaimonorle
+- Liberapay (recurring): https://liberapay.com/jaimonorle/
 
 ---
 
