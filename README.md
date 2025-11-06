@@ -6,9 +6,6 @@
 
 
 [![DCO](https://img.shields.io/badge/DCO-1.1-blue.svg)](https://developercertificate.org/)
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/jaimonorle/formBuilder-ConditionalLogic?display_name=tag)](https://github.com/jaimonorle/formBuilder-ConditionalLogic/releases)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
@@ -243,6 +240,10 @@ This project uses the **all-contributors** spec to recognize **code and non-code
 The Contributors table lives below and is managed automatically.
 
 ---
+
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Contributors ✨
 
