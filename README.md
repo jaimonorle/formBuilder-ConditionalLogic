@@ -247,6 +247,18 @@ The Contributors table lives below and is managed automatically.
 Thanks to these wonderful people:
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://orleindustries.com"><img src="https://avatars.githubusercontent.com/u/209879806?v=4?s=80" width="80px;" alt="Jaimon Orlé"/><br /><sub><b>Jaimon Orlé</b></sub></a><br /><a href="https://github.com/jaimonorle/formBuilder-ConditionalLogic/commits?author=jaimonorle" title="Code">💻</a> <a href="https://github.com/jaimonorle/formBuilder-ConditionalLogic/commits?author=jaimonorle" title="Documentation">📖</a> <a href="#ideas-jaimonorle" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-jaimonorle" title="Maintenance">🚧</a> <a href="#infra-jaimonorle" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#projectManagement-jaimonorle" title="Project Management">📆</a> <a href="https://github.com/jaimonorle/formBuilder-ConditionalLogic/commits?author=jaimonorle" title="Tests">⚠️</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
