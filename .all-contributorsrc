@@ -26,6 +26,19 @@
         "projectManagement",
         "test"
       ]
+    },
+    {
+      "login": "lazarusvc",
+      "name": "Austin Lazarus",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4788358?v=4",
+      "profile": "https://lazarusvc.com",
+      "contributions": [
+        "ideas",
+        "research",
+        "review",
+        "test",
+        "bug"
+      ]
     }
   ]
 }
