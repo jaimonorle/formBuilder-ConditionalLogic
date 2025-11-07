@@ -1,5 +1,9 @@
 ﻿# Changelog
 
+✅ Field-level conditional logic (Visual + Advanced JSON) fully functional.
+✅ Logic Groups authoring modal; persisted via hidden __logicGroups; autoloaded by renderer.
+✅ Stable builder UX (no stage rebuild on save).
+🧩 Minor UI polish (clean headers, spacing, modal overlay).
 
 ## 0.2.2 — Public demos & polish
 

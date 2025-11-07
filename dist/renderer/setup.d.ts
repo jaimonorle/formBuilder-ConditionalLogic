@@ -10,9 +10,6 @@ declare global {
         };
     }
 }
-export declare function setup(formEl: HTMLElement | Element, _formData?: any, options?: SetupOptions): {
-    refresh: () => void;
-    destroy: () => void;
-};
+export declare function setup(formEl: HTMLElement | Element, _formData?: any, options?: SetupOptions): void;
 export declare function refresh(formEl: HTMLElement | Element): void;
 export declare function evaluateField(formEl: HTMLElement | Element, _name: string): void;

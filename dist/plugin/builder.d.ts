@@ -1,9 +1,8 @@
 /**
- * Builder-side plugin helpers for formBuilder.
- * Adds:
- *  - typeUserAttrs for logic JSON, applyTo, logicGroup
- *  - onOpenFieldEdit panel that groups these controls
- *  - Visual Rules Editor (optional) that populates the logic JSON without typing
+ * Builder plugin for formBuilder: adds Conditional Logic panel and Groups modal.
+ * Exports:
+ *  - withConditionalLogic(opts) → formBuilder options extension
+ *  - attachLogicGroupsManager(toolbarEl, hooks)
  */
 type UserAttrs = Record<string, any>;
 export interface FieldMeta {
@@ -25,13 +24,12 @@ export interface BuilderInitOptions {
     }> | null;
     enableVisualEditor?: boolean;
 }
+/** Build the options object to pass into $('.build-wrap').formBuilder(...) */
 export declare function withConditionalLogic(opts?: BuilderInitOptions): {
     typeUserAttrs: Record<string, UserAttrs>;
     onOpenFieldEdit: (editPanel: HTMLElement) => void;
 };
-/**
- * Form-level groups JSON manager (as before)
- */
+/** Minimal Groups GUI living in a modal attached to a toolbar element */
 export declare function attachLogicGroupsManager(targetContainer: HTMLElement, initialOrOpts?: string | {
     initialJson?: string;
     getAvailableFields?: () => FieldMeta[];

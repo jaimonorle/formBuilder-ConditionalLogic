@@ -290,19 +290,57 @@ function reeval(form: HTMLElement, targets: ReturnType<typeof findTargets>, opti
 export function setup(formEl: HTMLElement | Element, _formData?: any, options: SetupOptions = {}) {
     const form = formEl as HTMLElement;
 
+    // --- 0) Extract Logic Groups from formData (hidden field) BEFORE target discovery
+    // We look for a hidden field named "__logicGroups" (or "logicGroups") and install it on window.
+    try {
+        if (_formData) {
+            const arr = Array.isArray(_formData)
+                ? _formData
+                : (typeof _formData === 'string' ? JSON.parse(_formData) : []);
+
+            if (Array.isArray(arr)) {
+                const grpField =
+                    arr.find((f: any) => f?.type === 'hidden' && (f?.name === '__logicGroups' || f?.name === 'logicGroups'));
+                if (grpField?.value && typeof grpField.value === 'string') {
+                    try {
+                        const parsed = JSON.parse(grpField.value);
+                        if (parsed && typeof parsed === 'object') (window as any).fbLogicGroups = parsed;
+                    } catch { /* ignore bad JSON */ }
+                }
+            }
+        }
+    } catch { /* non-fatal */ }
+
+    // --- 1) Hydrate per-field attributes (data-logic, data-logic-container, data-logic-group)
     if (_formData) {
         try { hydrateFromFormData(form, _formData); }
         catch (e) { if (window.__FB_LOGIC_DEBUG__) console.warn('hydrateFromFormData failed', e); }
     }
 
+    // --- 2) Discover targets and bind listeners
     const targets = findTargets(form);
 
     const watched = new Set<string>();
-    targets.forEach((t) => { t.cfg.groups?.forEach((g) => g.rules.forEach((r) => watched.add(r.field))); });
+    // collect all fields referenced by rules (including group rules)
+    targets.forEach((t) => {
+        const groups = (t.cfg?.groups || []) as any[];
+        groups.forEach((g) => {
+            (g.rules || []).forEach((r: any) => {
+                if (r?.field) {
+                    watched.add(r.field);
+                    // also watch array-notation variants, e.g. "foo[]" vs "foo"
+                    watched.add(String(r.field).replace(/\[\]$/, ''));
+                }
+            });
+        });
+    });
+
     if (window.__FB_LOGIC_DEBUG__) console.log('[fb-logic] watching fields:', Array.from(watched));
 
     const handler = (ev: Event) => {
-        const nameAttr = (ev.target as HTMLInputElement)?.name;
+        const t = ev.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement | null;
+        if (!t) return;
+        const nameAttr = t.name || (t.getAttribute && t.getAttribute('name')) || '';
         if (!nameAttr) return;
         const simple = nameAttr.replace(/\[\]$/, '');
         if (watched.has(nameAttr) || watched.has(simple)) {
@@ -314,21 +352,16 @@ export function setup(formEl: HTMLElement | Element, _formData?: any, options: S
     form.addEventListener('input', handler, true);
     form.addEventListener('change', handler, true);
 
+    // First run
     reeval(form, targets, options);
 
+    // Optional external refresh hook
     form.addEventListener('fb:reinit-logic' as any, () => reeval(form, targets, options));
 
-    const api = {
-        refresh: () => reeval(form, targets, options),
-        destroy: () => {
-            form.removeEventListener('input', handler, true);
-            form.removeEventListener('change', handler, true);
-        },
-    };
     // expose for quick debugging from console
-    (window as any)._fbLogic = api;
-    return api;
+    (window as any)._fbLogic = { refresh: () => reeval(form, targets, options) };
 }
+
 
 export function refresh(formEl: HTMLElement | Element) {
     setup(formEl);
