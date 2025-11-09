@@ -1,0 +1,75 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Builder Demo (Static UMD)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/formBuilder@3.21.1/dist/form-builder.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/formBuilder@3.21.1/dist/form-render.min.css">
+    <style>
+        body {
+            padding: 2rem
+        }
+
+        #toolbar {
+            margin-bottom: 10px
+        }
+    </style>
+</head>
+<body>
+    <h1>Builder Demo (UMD)</h1>
+    <div id="toolbar" class="mb-2"></div>
+    <div class="build-wrap"></div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/formBuilder@3.21.1/dist/form-builder.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/formBuilder@3.21.1/dist/form-render.min.js"></script>
+
+    <!-- built bundle -->
+    <script src="../dist/formbuilder-conditional-logic.umd.cjs"></script>
+    <script>
+    const { withConditionalLogic, attachLogicGroupsManager } = window.FBConditionalLogic.builder;
+
+    const toolbar = document.getElementById('toolbar');
+    let fb;
+
+    const getFormArray = () => {
+      const data = fb?.actions?.getData?.('json');
+      return typeof data === 'string' ? JSON.parse(data) : (Array.isArray(data) ? data : []);
+    };
+    const getAvailableFields = () =>
+      getFormArray().filter(f => f?.name).map(f => ({
+        name: f.name, type: f.type, label: f.label,
+        values: Array.isArray(f.values) ? f.values.map(v => ({label: v.label ?? v.value, value: v.value})) : undefined
+      }));
+    const getFieldValues = (fieldName) => {
+      const arr = getFormArray();
+      const f = arr.find(ff => ff?.name === fieldName);
+      return Array.isArray(f?.values) ? f.values.map(v => ({label: v.label ?? v.value, value: v.value})) : null;
+    };
+
+    const options = withConditionalLogic({
+      panelTitle: 'Conditional Logic',
+      enableVisualEditor: true,
+      getAvailableFields,
+      getFieldValues
+    });
+
+    fb = window.jQuery('.build-wrap').formBuilder(options);
+
+    attachLogicGroupsManager(toolbar, { getAvailableFields, getFieldValues });
+
+    const exportBtn = document.createElement('button');
+    exportBtn.className = 'btn btn-sm btn-outline-secondary ms-2';
+    exportBtn.textContent = 'Export JSON to console';
+    exportBtn.onclick = () => {
+      const data = fb.actions.getData('json');
+      console.log('builder JSON:', data);
+      alert('Form JSON printed to console.');
+    };
+    toolbar.appendChild(exportBtn);
+    </script>
+</body>
+</html>

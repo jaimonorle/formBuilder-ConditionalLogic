@@ -1,0 +1,45 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Composed Demo (Builder JSON → Render + Logic)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Composed Demo</h1>
+    <p class="text-muted">Renders from JSON and applies conditional logic from the same JSON.</p>
+
+    <div id="render"></div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/formBuilder@3.21.1/dist/form-render.min.js"></script>
+
+    <script type="module">
+        import { setup } from '/src/renderer/setup.ts';
+
+        // Turn on debug logs:
+        window.__FB_LOGIC_DEBUG__ = true;
+
+        // IMPORTANT: Make sure the radio values match the rule ("yes"/"no"), or update the rule accordingly.
+        const formData = [{ "type": "radio-group", "required": false, "label": "Radio Group", "inline": false, "name": "radio-group-1762553349633-0", "access": false, "other": false, "logicApplyTo": "self", "values": [{ "label": "Option 1", "value": "option-1", "selected": false }, { "label": "Option 2", "value": "option-2", "selected": false }, { "label": "Option 3", "value": "option-3", "selected": false }] }, { "type": "text", "required": false, "label": "Text Field", "className": "form-control", "name": "text-1762553351518-0", "access": false, "subtype": "text", "logic": "{\n  \"groups\": [\n    {\n      \"mode\": \"any\",\n      \"rules\": [\n        {\n          \"field\": \"radio-group-1762553349633-0\",\n          \"op\": \"equals\",\n          \"value\": \"option-1\"\n        }\n      ],\n      \"actions\": [\n        \"show\",\n        \"require\",\n        \"enable\"\n      ]\n    }\n  ]\n}", "logicApplyTo": "self" }, { "type": "select", "required": false, "label": "Select", "className": "form-control", "name": "select-1762553352518-0", "access": false, "multiple": false, "logicApplyTo": "self", "values": [{ "label": "Option 1", "value": "option-1", "selected": true }, { "label": "Option 2", "value": "option-2", "selected": false }, { "label": "Option 3", "value": "option-3", "selected": false }] }, { "type": "textarea", "required": false, "label": "Text Area", "className": "form-control", "name": "textarea-1762553353324-0", "access": false, "subtype": "textarea", "logicApplyTo": "group", "logicGroup": "asdf" }, { "type": "hidden", "name": "__logicGroups", "value": "{\"asdf\":{\"mode\":\"any\",\"rules\":[{\"field\":\"select-1762553352518-0\",\"op\":\"equals\",\"value\":\"option-3\"}],\"actions\":[\"show\",\"require\",\"enable\"]}}", "label": " ", "access": false, "className": "d-none" }];
+
+        const $root = window.jQuery('#render');
+        $root.formRender({ formData });      // 1) render
+
+        // Plain-JS change logger (no TS "as" here)
+        document.getElementById('render').addEventListener('change', (e) => {
+            const t = e.target;
+            console.log('[demo] change:', t && t.name, '→', t && t.value, 'checked?', t && t.checked);
+        }, true);
+
+        const api = setup($root[0], formData);  // 2) hydrate + bind
+        window._fbLogic = api;                  // for console: _fbLogic.refresh()
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{
+  "projectName": "formBuilder-ConditionalLogic",
+  "projectOwner": "jaimonorle",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 80,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributorsPerLine": 7,
+  "commitType": "docs",
+  "contributors": [
+    {
+      "login": "jaimonorle",
+      "name": "Jaimon Orlé",
+      "avatar_url": "https://avatars.githubusercontent.com/u/209879806?v=4",
+      "profile": "http://orleindustries.com",
+      "contributions": [
+        "code",
+        "doc",
+        "ideas",
+        "maintenance",
+        "infra",
+        "projectManagement",
+        "test"
+      ]
+    },
+    {
+      "login": "lazarusvc",
+      "name": "Austin Lazarus",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4788358?v=4",
+      "profile": "https://lazarusvc.com",
+      "contributions": [
+        "ideas",
+        "research",
+        "review",
+        "test",
+        "bug"
+      ]
+    }
+  ]
+}
