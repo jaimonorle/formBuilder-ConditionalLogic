@@ -1,6 +1,6 @@
 {
-  "name": "formbuilder-conditional-logic",
-  "version": "0.2.2",
+  "name": "@orle-industries/formbuilder-conditional-logic",
+  "version": "1.0.0",
   "private": true,
   "license": "MIT",
   "type": "module",
