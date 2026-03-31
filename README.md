@@ -242,7 +242,7 @@ The Contributors table lives below and is managed automatically.
 ---
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## Contributors ✨
@@ -257,6 +257,7 @@ Thanks to these wonderful people:
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="http://orleindustries.com"><img src="https://avatars.githubusercontent.com/u/209879806?v=4?s=80" width="80px;" alt="Jaimon Orlé"/><br /><sub><b>Jaimon Orlé</b></sub></a><br /><a href="https://github.com/jaimonorle/formBuilder-ConditionalLogic/commits?author=jaimonorle" title="Code">💻</a> <a href="https://github.com/jaimonorle/formBuilder-ConditionalLogic/commits?author=jaimonorle" title="Documentation">📖</a> <a href="#ideas-jaimonorle" title="Ideas, Planning, & Feedback">🤔</a> <a href="#maintenance-jaimonorle" title="Maintenance">🚧</a> <a href="#infra-jaimonorle" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#projectManagement-jaimonorle" title="Project Management">📆</a> <a href="https://github.com/jaimonorle/formBuilder-ConditionalLogic/commits?author=jaimonorle" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://lazarusvc.com"><img src="https://avatars.githubusercontent.com/u/4788358?v=4?s=80" width="80px;" alt="Austin Lazarus"/><br /><sub><b>Austin Lazarus</b></sub></a><br /><a href="#ideas-lazarusvc" title="Ideas, Planning, & Feedback">🤔</a> <a href="#research-lazarusvc" title="Research">🔬</a> <a href="https://github.com/jaimonorle/formBuilder-ConditionalLogic/pulls?q=is%3Apr+reviewed-by%3Alazarusvc" title="Reviewed Pull Requests">👀</a> <a href="https://github.com/jaimonorle/formBuilder-ConditionalLogic/commits?author=lazarusvc" title="Tests">⚠️</a> <a href="https://github.com/jaimonorle/formBuilder-ConditionalLogic/issues?q=author%3Alazarusvc" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://dev.datavine.com"><img src="https://avatars.githubusercontent.com/u/1178036?v=4?s=80" width="80px;" alt="Jon David Schober"/><br /><sub><b>Jon David Schober</b></sub></a><br /><a href="https://github.com/jaimonorle/formBuilder-ConditionalLogic/issues?q=author%3Ajondavidschober" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
