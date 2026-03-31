@@ -5,6 +5,17 @@
 ✅ Stable builder UX (no stage rebuild on save).
 🧩 Minor UI polish (clean headers, spacing, modal overlay).
 
+## 1.1.0 — Configurable builder selector (fixes #5)
+
+* **New option: `builderSelector`** — both `withConditionalLogic()` and `attachLogicGroupsManager()` now accept a `builderSelector` option (default: `'.build-wrap'`) to specify the CSS selector for the formBuilder container element
+* **Fix:** Field discovery fallback no longer hardcodes `.build-wrap` — users with custom container selectors can now pass `builderSelector: '#my-editor'` instead of getting "(no fields yet)"
+* Backward-compatible: default remains `'.build-wrap'`, and provider callbacks (`getAvailableFields`/`getFieldValues`) still take priority over the selector fallback
+
+## 1.0.0 — Stable release
+
+* ISSU project template applied (CLAUDE.md, docs/, _archive/)
+* No functional changes from 0.2.2
+
 ## 0.2.2 — Public demos & polish
 
 * Add static UMD demos (`demo/builder-static.html`, `demo/render-static.html`)

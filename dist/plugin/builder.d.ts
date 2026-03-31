@@ -23,6 +23,8 @@ export interface BuilderInitOptions {
         value: string;
     }> | null;
     enableVisualEditor?: boolean;
+    /** CSS selector for the formBuilder container element (default: '.build-wrap') */
+    builderSelector?: string;
 }
 /** Build the options object to pass into $('.build-wrap').formBuilder(...) */
 export declare function withConditionalLogic(opts?: BuilderInitOptions): {
@@ -37,6 +39,8 @@ export declare function attachLogicGroupsManager(targetContainer: HTMLElement, i
         label: string;
         value: string;
     }> | null;
+    /** CSS selector for the formBuilder container element (default: '.build-wrap') */
+    builderSelector?: string;
 }): {
     getJson: () => string;
     setJson: (j: string) => void;

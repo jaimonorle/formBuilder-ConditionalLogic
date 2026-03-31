@@ -11,3 +11,8 @@ coverage
 .vs/
 *.vsidx
 
+# Internal project files (not for public repo)
+CLAUDE.md
+docs/
+_archive/
+

@@ -1,4 +1,4 @@
-const ie = [
+const ue = [
   "text",
   "textarea",
   "number",
@@ -11,10 +11,10 @@ const ie = [
   "file",
   "autocomplete"
 ];
-function ue(e = {}) {
-  const t = e.panelTitle || "Conditional Logic", l = e.types && e.types.length ? e.types : ie, n = e.enableVisualEditor !== !1, d = {};
-  l.forEach((f) => {
-    d[f] = {
+function de(e = {}) {
+  const t = e.panelTitle || "Conditional Logic", l = e.types && e.types.length ? e.types : ue, n = e.enableVisualEditor !== !1, u = e.builderSelector || ".build-wrap", p = {};
+  l.forEach((m) => {
+    p[m] = {
       logic: {
         label: `${t} (JSON)`,
         type: "textarea",
@@ -39,17 +39,17 @@ function ue(e = {}) {
       }
     };
   });
-  function p(f, g, c, _) {
-    const C = document.createElement("div");
-    C.className = "fb-logic-ve", C.style.marginBottom = "8px";
-    const N = document.createElement("div");
-    N.style.display = "flex", N.style.gap = "6px", N.style.alignItems = "center";
-    const R = document.createElement("strong");
-    R.textContent = "Conditional Logic (Visual)";
+  function b(m, g, x, N) {
+    const _ = document.createElement("div");
+    _.className = "fb-logic-ve", _.style.marginBottom = "8px";
+    const O = document.createElement("div");
+    O.style.display = "flex", O.style.gap = "6px", O.style.alignItems = "center";
+    const D = document.createElement("strong");
+    D.textContent = "Conditional Logic (Visual)";
     const k = document.createElement("span");
-    k.style.fontSize = "12px", k.style.opacity = "0.7", k.textContent = "— use this editor then save to JSON below", N.appendChild(R), N.appendChild(k), C.appendChild(N);
-    const y = document.createElement("div");
-    y.className = "fb-logic-ve-body", y.style.border = "1px dashed #cbd5e1", y.style.padding = "8px", y.style.marginTop = "6px", C.appendChild(y);
+    k.style.fontSize = "12px", k.style.opacity = "0.7", k.textContent = "— use this editor then save to JSON below", O.appendChild(D), O.appendChild(k), _.appendChild(O);
+    const f = document.createElement("div");
+    f.className = "fb-logic-ve-body", f.style.border = "1px dashed #cbd5e1", f.style.padding = "8px", f.style.marginTop = "6px", _.appendChild(f);
     const L = document.createElement("div");
     L.style.margin = "6px 0", L.innerHTML = `
     <label style="margin-right:8px;">Mode</label>
@@ -57,212 +57,212 @@ function ue(e = {}) {
       <option value="any">ANY (OR)</option>
       <option value="all">ALL (AND)</option>
     </select>
-  `, y.appendChild(L);
-    const F = document.createElement("div");
-    F.style.margin = "6px 0", F.innerHTML = `
+  `, f.appendChild(L);
+    const I = document.createElement("div");
+    I.style.margin = "6px 0", I.innerHTML = `
     <label style="margin-right:8px;">Actions</label>
     <label class="form-check form-check-inline"><input class="ve-act form-check-input" type="checkbox" value="show" checked> <span class="form-check-label">show</span></label>
     <label class="form-check form-check-inline"><input class="ve-act form-check-input" type="checkbox" value="require"> <span class="form-check-label">require</span></label>
     <label class="form-check form-check-inline"><input class="ve-act form-check-input" type="checkbox" value="enable"> <span class="form-check-label">enable</span></label>
     <label class="form-check form-check-inline"><input class="ve-act form-check-input" type="checkbox" value="disable"> <span class="form-check-label">disable</span></label>
     <label class="form-check form-check-inline"><input class="ve-act form-check-input" type="checkbox" value="hide"> <span class="form-check-label">hide</span></label>
-  `, y.appendChild(F);
-    const W = document.createElement("div");
-    W.className = "ve-rules", W.style.marginTop = "6px", W.style.display = "grid", W.style.gap = "6px", y.appendChild(W);
-    const I = document.createElement("div");
-    I.style.display = "flex", I.style.justifyContent = "flex-end", I.style.gap = "8px", I.style.marginTop = "8px";
-    const M = document.createElement("button");
-    M.type = "button", M.className = "btn btn-sm btn-outline-secondary", M.textContent = "Add rule";
-    const J = document.createElement("button");
-    J.type = "button", J.className = "btn btn-sm btn-primary", J.textContent = "Save to JSON", I.appendChild(M), I.appendChild(J), y.appendChild(I);
-    const D = () => {
-      var a, i, o, r;
+  `, f.appendChild(I);
+    const H = document.createElement("div");
+    H.className = "ve-rules", H.style.marginTop = "6px", H.style.display = "grid", H.style.gap = "6px", f.appendChild(H);
+    const M = document.createElement("div");
+    M.style.display = "flex", M.style.justifyContent = "flex-end", M.style.gap = "8px", M.style.marginTop = "8px";
+    const W = document.createElement("button");
+    W.type = "button", W.className = "btn btn-sm btn-outline-secondary", W.textContent = "Add rule";
+    const j = document.createElement("button");
+    j.type = "button", j.className = "btn btn-sm btn-primary", j.textContent = "Save to JSON", M.appendChild(W), M.appendChild(j), f.appendChild(M);
+    const $ = () => {
+      var r, c, o, a;
       try {
-        const u = (a = window.jQuery) == null ? void 0 : a.call(window, ".build-wrap"), v = (i = u == null ? void 0 : u.data) == null ? void 0 : i.call(u, "formBuilder"), s = (r = (o = v == null ? void 0 : v.actions) == null ? void 0 : o.getData) == null ? void 0 : r.call(o, "json");
+        const i = (r = window.jQuery) == null ? void 0 : r.call(window, u), h = (c = i == null ? void 0 : i.data) == null ? void 0 : c.call(i, "formBuilder"), s = (a = (o = h == null ? void 0 : h.actions) == null ? void 0 : o.getData) == null ? void 0 : a.call(o, "json");
         return (typeof s == "string" ? JSON.parse(s) : Array.isArray(s) ? s : []).filter((E) => E == null ? void 0 : E.name).map((E) => ({
           name: E.name,
           type: E.type,
           label: E.label,
-          values: Array.isArray(E.values) ? E.values.map((x) => ({ label: x.label ?? x.value, value: x.value })) : void 0
+          values: Array.isArray(E.values) ? E.values.map((S) => ({ label: S.label ?? S.value, value: S.value })) : void 0
         }));
       } catch {
         return [];
       }
-    }, V = (a) => {
-      const i = D().find((o) => o.name === a);
-      return (i == null ? void 0 : i.values) ?? null;
-    }, z = () => {
-      const a = document.createElement("select");
-      a.className = "ve-field form-select form-select-sm", a.style.minWidth = "160px";
-      const i = D();
-      if (i.length)
-        i.forEach((o) => {
-          const r = document.createElement("option");
-          r.value = o.name, r.textContent = o.label ? `${o.label} (${o.name})` : o.name, a.appendChild(r);
+    }, z = (r) => {
+      const c = $().find((o) => o.name === r);
+      return (c == null ? void 0 : c.values) ?? null;
+    }, U = () => {
+      const r = document.createElement("select");
+      r.className = "ve-field form-select form-select-sm", r.style.minWidth = "160px";
+      const c = $();
+      if (c.length)
+        c.forEach((o) => {
+          const a = document.createElement("option");
+          a.value = o.name, a.textContent = o.label ? `${o.label} (${o.name})` : o.name, r.appendChild(a);
         });
       else {
         const o = document.createElement("option");
-        o.value = "", o.textContent = "(no fields yet)", a.appendChild(o);
+        o.value = "", o.textContent = "(no fields yet)", r.appendChild(o);
       }
-      return a;
-    }, U = (a) => {
+      return r;
+    }, P = (r) => {
       var s;
-      const i = document.createElement("select");
-      i.className = "ve-op form-select form-select-sm", i.style.minWidth = "140px";
-      const o = D().find((w) => w.name === a), r = (o == null ? void 0 : o.type) === "number", u = (o == null ? void 0 : o.type) === "radio-group" || (o == null ? void 0 : o.type) === "select" || !!((s = o == null ? void 0 : o.values) != null && s.length), v = r ? ["equals", "notEquals", "gt", "gte", "lt", "lte", "isEmpty", "notEmpty"] : u ? ["equals", "notEquals", "isEmpty", "notEmpty"] : ["equals", "notEquals", "contains", "startsWith", "endsWith", "isEmpty", "notEmpty"];
-      return i.innerHTML = "", v.forEach((w) => {
+      const c = document.createElement("select");
+      c.className = "ve-op form-select form-select-sm", c.style.minWidth = "140px";
+      const o = $().find((C) => C.name === r), a = (o == null ? void 0 : o.type) === "number", i = (o == null ? void 0 : o.type) === "radio-group" || (o == null ? void 0 : o.type) === "select" || !!((s = o == null ? void 0 : o.values) != null && s.length), h = a ? ["equals", "notEquals", "gt", "gte", "lt", "lte", "isEmpty", "notEmpty"] : i ? ["equals", "notEquals", "isEmpty", "notEmpty"] : ["equals", "notEquals", "contains", "startsWith", "endsWith", "isEmpty", "notEmpty"];
+      return c.innerHTML = "", h.forEach((C) => {
         const E = document.createElement("option");
-        E.value = w, E.textContent = w, i.appendChild(E);
-      }), i;
-    }, m = (a, i) => {
-      const o = V(a);
+        E.value = C, E.textContent = C, c.appendChild(E);
+      }), c;
+    }, d = (r, c) => {
+      const o = z(r);
       if (o && o.length) {
-        const u = document.createElement("select");
-        return u.className = "ve-value form-select form-select-sm", o.forEach((v) => {
+        const i = document.createElement("select");
+        return i.className = "ve-value form-select form-select-sm", o.forEach((h) => {
           const s = document.createElement("option");
-          s.value = v.value, s.textContent = v.label ?? v.value, u.appendChild(s);
-        }), u;
+          s.value = h.value, s.textContent = h.label ?? h.value, i.appendChild(s);
+        }), i;
       }
-      const r = document.createElement("input");
-      return r.className = "ve-value form-control form-control-sm", r.type = "text", r;
+      const a = document.createElement("input");
+      return a.className = "ve-value form-control form-control-sm", a.type = "text", a;
     };
-    function b(a, i, o) {
-      var O;
-      const r = document.createElement("div");
-      r.className = "ve-row", r.style.display = "flex", r.style.gap = "6px", r.style.alignItems = "center";
-      const u = z(), v = a || ((O = u.options[0]) == null ? void 0 : O.value) || "", s = U(v), w = document.createElement("div"), E = (S, q) => {
-        w.innerHTML = "", w.appendChild(m(S));
+    function y(r, c, o) {
+      var G;
+      const a = document.createElement("div");
+      a.className = "ve-row", a.style.display = "flex", a.style.gap = "6px", a.style.alignItems = "center";
+      const i = U(), h = r || ((G = i.options[0]) == null ? void 0 : G.value) || "", s = P(h), C = document.createElement("div"), E = (w, q) => {
+        C.innerHTML = "", C.appendChild(d(w));
       };
-      if (a && (u.value = a), E(u.value), i) {
-        const S = U(u.value);
-        s.innerHTML = S.innerHTML, s.value = i;
+      if (r && (i.value = r), E(i.value), c) {
+        const w = P(i.value);
+        s.innerHTML = w.innerHTML, s.value = c;
       }
-      o != null && (w.querySelector(".ve-value").value = o), u.addEventListener("change", () => {
-        const S = U(u.value);
-        s.innerHTML = S.innerHTML, E(u.value);
-      }), r.appendChild(u), r.appendChild(s), r.appendChild(w);
-      const x = document.createElement("button");
-      x.type = "button", x.className = "btn btn-sm btn-outline-danger", x.textContent = "Remove", x.addEventListener("click", () => r.remove()), r.appendChild(x), W.appendChild(r);
+      o != null && (C.querySelector(".ve-value").value = o), i.addEventListener("change", () => {
+        const w = P(i.value);
+        s.innerHTML = w.innerHTML, E(i.value);
+      }), a.appendChild(i), a.appendChild(s), a.appendChild(C);
+      const S = document.createElement("button");
+      S.type = "button", S.className = "btn btn-sm btn-outline-danger", S.textContent = "Remove", S.addEventListener("click", () => a.remove()), a.appendChild(S), H.appendChild(a);
     }
-    M.addEventListener("click", () => b()), J.addEventListener("click", () => {
-      const a = y.querySelector(".ve-mode").value, i = Array.from(y.querySelectorAll(".ve-act")).filter((s) => s.checked).map((s) => s.value), r = Array.from(y.querySelectorAll(".ve-row")).map((s) => {
-        const w = s.querySelector(".ve-field").value, E = s.querySelector(".ve-op").value, O = s.querySelector(".ve-value").value ?? "";
-        return { field: w, op: E, value: O };
-      }), u = { groups: [{ mode: a, rules: r, actions: i }] }, v = g();
-      v ? (v.value = JSON.stringify(u, null, 2), alert("Conditional Logic JSON updated.")) : alert("Could not find the logic JSON field to update.");
+    W.addEventListener("click", () => y()), j.addEventListener("click", () => {
+      const r = f.querySelector(".ve-mode").value, c = Array.from(f.querySelectorAll(".ve-act")).filter((s) => s.checked).map((s) => s.value), a = Array.from(f.querySelectorAll(".ve-row")).map((s) => {
+        const C = s.querySelector(".ve-field").value, E = s.querySelector(".ve-op").value, G = s.querySelector(".ve-value").value ?? "";
+        return { field: C, op: E, value: G };
+      }), i = { groups: [{ mode: r, rules: a, actions: c }] }, h = g();
+      h ? (h.value = JSON.stringify(i, null, 2), alert("Conditional Logic JSON updated.")) : alert("Could not find the logic JSON field to update.");
     });
     try {
-      const a = g(), i = a && a.value || "";
-      if (i && i.trim()) {
-        const o = JSON.parse(i), r = Array.isArray(o.groups) ? o.groups[0] : null;
-        if (r) {
-          y.querySelector(".ve-mode").value = r.mode || "any";
-          const u = new Set(r.actions || []);
-          y.querySelectorAll(".ve-act").forEach((v) => {
-            v.checked = u.has(v.value);
-          }), (r.rules || []).forEach((v) => b(v.field, v.op, v.value));
+      const r = g(), c = r && r.value || "";
+      if (c && c.trim()) {
+        const o = JSON.parse(c), a = Array.isArray(o.groups) ? o.groups[0] : null;
+        if (a) {
+          f.querySelector(".ve-mode").value = a.mode || "any";
+          const i = new Set(a.actions || []);
+          f.querySelectorAll(".ve-act").forEach((h) => {
+            h.checked = i.has(h.value);
+          }), (a.rules || []).forEach((h) => y(h.field, h.op, h.value));
         }
       }
     } catch {
     }
-    f.prepend(C);
+    m.prepend(_);
   }
-  function h(f) {
+  function v(m) {
     const g = Array.from(
-      f.querySelectorAll('[name="logic"], [name="logicApplyTo"], [name="logicGroup"]')
+      m.querySelectorAll('[name="logic"], [name="logicApplyTo"], [name="logicGroup"]')
     );
     if (!g.length) return;
-    let c = f.querySelector(".fb-logic-section");
-    if (!c) {
-      c = document.createElement("div"), c.className = "fb-logic-section", c.innerHTML = `
+    let x = m.querySelector(".fb-logic-section");
+    if (!x) {
+      x = document.createElement("div"), x.className = "fb-logic-section", x.innerHTML = `
       <div class="fb-logic-header" style="margin-top:8px; font-weight:600; cursor:pointer;">
         ${t}
         <span style="font-weight:400; font-size:12px; opacity:.7"> (toggle)</span>
       </div>
       <div class="fb-logic-body" style="border:1px solid #e5e7eb; padding:8px; margin-top:6px; display:none;"></div>
-    `, f.appendChild(c);
-      const k = c.querySelector(".fb-logic-header"), y = c.querySelector(".fb-logic-body");
+    `, m.appendChild(x);
+      const k = x.querySelector(".fb-logic-header"), f = x.querySelector(".fb-logic-body");
       k.addEventListener("click", () => {
-        const L = y.style.display !== "none";
-        y.style.display = L ? "none" : "";
+        const L = f.style.display !== "none";
+        f.style.display = L ? "none" : "";
       });
     }
-    const _ = c.querySelector(".fb-logic-body");
-    let C = _.querySelector(".fb-logic-advanced");
-    if (!C) {
-      C = document.createElement("div"), C.className = "fb-logic-advanced", C.innerHTML = `
+    const N = x.querySelector(".fb-logic-body");
+    let _ = N.querySelector(".fb-logic-advanced");
+    if (!_) {
+      _ = document.createElement("div"), _.className = "fb-logic-advanced", _.innerHTML = `
       <div class="fb-logic-adv-header" style="margin-top:10px; font-weight:600; cursor:pointer;">
         Advanced (JSON)
         <span style="font-weight:400; font-size:12px; opacity:.7"> (toggle)</span>
       </div>
       <div class="fb-logic-adv-body" style="border:1px dashed #cbd5e1; padding:8px; margin-top:6px; display:none;"></div>
-    `, _.appendChild(C);
-      const k = C.querySelector(".fb-logic-adv-header"), y = C.querySelector(".fb-logic-adv-body");
+    `, N.appendChild(_);
+      const k = _.querySelector(".fb-logic-adv-header"), f = _.querySelector(".fb-logic-adv-body");
       k.addEventListener("click", () => {
-        const L = y.style.display !== "none";
-        y.style.display = L ? "none" : "";
+        const L = f.style.display !== "none";
+        f.style.display = L ? "none" : "";
       });
     }
-    const N = C.querySelector(".fb-logic-adv-body");
+    const O = _.querySelector(".fb-logic-adv-body");
     g.forEach((k) => {
-      const y = k.closest(".form-group") || k.closest("div") || k;
-      y && y.parentElement !== N && N.appendChild(y);
+      const f = k.closest(".form-group") || k.closest("div") || k;
+      f && f.parentElement !== O && O.appendChild(f);
     });
-    const R = /* @__PURE__ */ new Set();
-    if (N.querySelectorAll('[name="logic"], [name="logicApplyTo"], [name="logicGroup"]').forEach((k) => {
-      const y = k.getAttribute("name");
-      if (R.has(y)) {
+    const D = /* @__PURE__ */ new Set();
+    if (O.querySelectorAll('[name="logic"], [name="logicApplyTo"], [name="logicGroup"]').forEach((k) => {
+      const f = k.getAttribute("name");
+      if (D.has(f)) {
         const L = k.closest(".form-group") || k.closest("div") || k;
-        L && L.parentElement === N && L.remove();
+        L && L.parentElement === O && L.remove();
       } else
-        R.add(y);
+        D.add(f);
     }), n) {
-      const k = () => _.querySelector('[name="logic"]');
-      if (!_.querySelector(".fb-logic-ve")) {
-        const y = _.querySelectorAll(".fb-logic-ve");
-        y.length > 1 && y.forEach((L, F) => {
-          F > 0 && L.remove();
-        }), p(_, k);
+      const k = () => N.querySelector('[name="logic"]');
+      if (!N.querySelector(".fb-logic-ve")) {
+        const f = N.querySelectorAll(".fb-logic-ve");
+        f.length > 1 && f.forEach((L, I) => {
+          I > 0 && L.remove();
+        }), b(N, k);
       }
     }
   }
-  return { typeUserAttrs: d, onOpenFieldEdit: h };
+  return { typeUserAttrs: p, onOpenFieldEdit: v };
 }
-function de(e, t) {
-  const l = typeof t == "string" ? { initialJson: t } : t || {}, n = { json: l.initialJson || "" };
-  function d() {
-    var m, b, a, i;
+function pe(e, t) {
+  const l = typeof t == "string" ? { initialJson: t } : t || {}, n = { json: l.initialJson || "" }, u = l.builderSelector || ".build-wrap";
+  function p() {
+    var d, y, r, c;
     try {
-      const o = (m = window.jQuery) == null ? void 0 : m.call(window, ".build-wrap"), r = (b = o == null ? void 0 : o.data) == null ? void 0 : b.call(o, "formBuilder"), u = (i = (a = r == null ? void 0 : r.actions) == null ? void 0 : a.getData) == null ? void 0 : i.call(a, "json");
-      return (typeof u == "string" ? JSON.parse(u) : Array.isArray(u) ? u : []).filter((s) => s == null ? void 0 : s.name).map((s) => ({
+      const o = (d = window.jQuery) == null ? void 0 : d.call(window, u), a = (y = o == null ? void 0 : o.data) == null ? void 0 : y.call(o, "formBuilder"), i = (c = (r = a == null ? void 0 : a.actions) == null ? void 0 : r.getData) == null ? void 0 : c.call(r, "json");
+      return (typeof i == "string" ? JSON.parse(i) : Array.isArray(i) ? i : []).filter((s) => s == null ? void 0 : s.name).map((s) => ({
         name: s.name,
         type: s.type,
         label: s.label,
-        values: Array.isArray(s.values) ? s.values.map((w) => ({ label: w.label ?? w.value, value: w.value })) : void 0
+        values: Array.isArray(s.values) ? s.values.map((C) => ({ label: C.label ?? C.value, value: C.value })) : void 0
       }));
     } catch {
       return [];
     }
   }
-  const p = () => {
-    var m;
+  const b = () => {
+    var d;
     try {
-      const b = (m = l.getAvailableFields) == null ? void 0 : m.call(l);
-      if (b && b.length) return b;
+      const y = (d = l.getAvailableFields) == null ? void 0 : d.call(l);
+      if (y && y.length) return y;
     } catch {
     }
-    return d();
-  }, h = (m) => {
-    var a;
+    return p();
+  }, v = (d) => {
+    var r;
     try {
-      const i = (a = l.getFieldValues) == null ? void 0 : a.call(l, m);
-      if (i) return i;
+      const c = (r = l.getFieldValues) == null ? void 0 : r.call(l, d);
+      if (c) return c;
     } catch {
     }
-    const b = p().find((i) => i.name === m);
-    return (b == null ? void 0 : b.values) ?? null;
-  }, f = document.createElement("div");
-  f.style.margin = "8px 0", f.innerHTML = `
+    const y = b().find((c) => c.name === d);
+    return (y == null ? void 0 : y.values) ?? null;
+  }, m = document.createElement("div");
+  m.style.margin = "8px 0", m.innerHTML = `
     <button type="button" class="btn btn-sm btn-outline-primary">Logic Groups</button>
     <div class="fb-logic-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:99999;">
       <div style="background:#fff; max-width:900px; width:92%; margin:4% auto; padding:16px; border-radius:8px;">
@@ -296,46 +296,46 @@ function de(e, t) {
         </div>
       </div>
     </div>
-  `, e.prepend(f);
-  const g = f.querySelector("button"), c = f.querySelector(".fb-logic-modal"), _ = c.querySelector(".fb-logic-close"), C = c.querySelector(".fb-groups-load-sample"), N = c.querySelector(".fb-groups-save"), R = c.querySelector(".fb-groups-from-json"), k = c.querySelector(".fb-groups-adv-header"), y = c.querySelector(".fb-groups-adv-body"), L = c.querySelector(".fb-logic-json"), F = c.querySelector(".fb-groups-list"), W = c.querySelector(".fb-groups-add"), I = () => {
-    const m = window.fbLogicGroups && typeof window.fbLogicGroups == "object" ? window.fbLogicGroups : n.json ? J(n.json) : {};
-    n.json = JSON.stringify(m || {}, null, 2), L.value = n.json, z(m || {}), c.style.display = "block";
-  }, M = () => {
-    c.style.display = "none";
+  `, e.prepend(m);
+  const g = m.querySelector("button"), x = m.querySelector(".fb-logic-modal"), N = x.querySelector(".fb-logic-close"), _ = x.querySelector(".fb-groups-load-sample"), O = x.querySelector(".fb-groups-save"), D = x.querySelector(".fb-groups-from-json"), k = x.querySelector(".fb-groups-adv-header"), f = x.querySelector(".fb-groups-adv-body"), L = x.querySelector(".fb-logic-json"), I = x.querySelector(".fb-groups-list"), H = x.querySelector(".fb-groups-add"), M = () => {
+    const d = window.fbLogicGroups && typeof window.fbLogicGroups == "object" ? window.fbLogicGroups : n.json ? j(n.json) : {};
+    n.json = JSON.stringify(d || {}, null, 2), L.value = n.json, U(d || {}), x.style.display = "block";
+  }, W = () => {
+    x.style.display = "none";
   };
-  g.addEventListener("click", I), _.addEventListener("click", M), c.addEventListener("click", (m) => {
-    m.target === c && M();
+  g.addEventListener("click", M), N.addEventListener("click", W), x.addEventListener("click", (d) => {
+    d.target === x && W();
   }), k.addEventListener("click", () => {
-    const m = y.style.display !== "none";
-    y.style.display = m ? "none" : "";
-  }), C.addEventListener("click", () => {
-    var i;
-    const a = {
+    const d = f.style.display !== "none";
+    f.style.display = d ? "none" : "";
+  }), _.addEventListener("click", () => {
+    var c;
+    const r = {
       vehicleDetails: {
         mode: "any",
-        rules: [{ field: ((i = p()[0]) == null ? void 0 : i.name) || "controller", op: "equals", value: "yes" }],
+        rules: [{ field: ((c = b()[0]) == null ? void 0 : c.name) || "controller", op: "equals", value: "yes" }],
         actions: ["show", "require"]
       }
     };
-    L.value = JSON.stringify(a, null, 2), z(a);
-  }), R.addEventListener("click", () => {
-    const m = J(L.value) || {};
-    z(m);
-  }), N.addEventListener("click", () => {
-    var b, a, i;
-    const m = U();
-    n.json = JSON.stringify(m, null, 2), L.value = n.json, window.fbLogicGroups = m;
+    L.value = JSON.stringify(r, null, 2), U(r);
+  }), D.addEventListener("click", () => {
+    const d = j(L.value) || {};
+    U(d);
+  }), O.addEventListener("click", () => {
+    var y, r, c;
+    const d = P();
+    n.json = JSON.stringify(d, null, 2), L.value = n.json, window.fbLogicGroups = d;
     try {
-      const o = (b = window.jQuery) == null ? void 0 : b.call(window, ".build-wrap"), r = (a = o == null ? void 0 : o.data) == null ? void 0 : a.call(o, "formBuilder");
-      if ((i = r == null ? void 0 : r.actions) != null && i.getData && !r.__fbLogicGroupsPatched) {
-        const u = r.actions.getData.bind(r.actions);
-        r.__fbLogicGroupsPatched = !0, r.actions.getData = (v) => {
-          const s = u(v);
-          if (v !== "json") return s;
-          const w = window.fbLogicGroups || J(n.json) || {}, E = JSON.stringify(w);
+      const o = (y = window.jQuery) == null ? void 0 : y.call(window, u), a = (r = o == null ? void 0 : o.data) == null ? void 0 : r.call(o, "formBuilder");
+      if ((c = a == null ? void 0 : a.actions) != null && c.getData && !a.__fbLogicGroupsPatched) {
+        const i = a.actions.getData.bind(a.actions);
+        a.__fbLogicGroupsPatched = !0, a.actions.getData = (h) => {
+          const s = i(h);
+          if (h !== "json") return s;
+          const C = window.fbLogicGroups || j(n.json) || {}, E = JSON.stringify(C);
           try {
-            const x = typeof s == "string" ? JSON.parse(s) : Array.isArray(s) ? s : [], O = x.findIndex((q) => (q == null ? void 0 : q.type) === "hidden" && ((q == null ? void 0 : q.name) === "__logicGroups" || (q == null ? void 0 : q.name) === "logicGroups")), S = { type: "hidden", name: "__logicGroups", value: E, label: " ", access: !1, className: "d-none" };
-            return O >= 0 ? x[O] = { ...x[O], ...S } : x.push(S), JSON.stringify(x);
+            const S = typeof s == "string" ? JSON.parse(s) : Array.isArray(s) ? s : [], G = S.findIndex((q) => (q == null ? void 0 : q.type) === "hidden" && ((q == null ? void 0 : q.name) === "__logicGroups" || (q == null ? void 0 : q.name) === "logicGroups")), w = { type: "hidden", name: "__logicGroups", value: E, label: " ", access: !1, className: "d-none" };
+            return G >= 0 ? S[G] = { ...S[G], ...w } : S.push(w), JSON.stringify(S);
           } catch {
             return s;
           }
@@ -344,153 +344,153 @@ function de(e, t) {
     } catch (o) {
       console.warn("[logic-groups] export patch failed", o);
     }
-    alert("Logic groups saved (no rebuild). They will be embedded into exported JSON automatically."), M();
-  }), W.addEventListener("click", () => V());
-  function J(m) {
+    alert("Logic groups saved (no rebuild). They will be embedded into exported JSON automatically."), W();
+  }), H.addEventListener("click", () => z());
+  function j(d) {
     try {
-      return JSON.parse(m);
+      return JSON.parse(d);
     } catch {
       return null;
     }
   }
-  function D(m) {
-    for (; m.firstChild; ) m.removeChild(m.firstChild);
+  function $(d) {
+    for (; d.firstChild; ) d.removeChild(d.firstChild);
   }
-  function V(m = "") {
-    const b = document.createElement("div");
-    b.className = "fb-group-block", b.style.border = "1px solid #e5e7eb", b.style.borderRadius = "6px", b.style.padding = "8px", b.style.marginTop = "8px";
-    const a = document.createElement("div");
-    a.style.display = "grid", a.style.gridTemplateColumns = "1fr auto", a.style.gap = "8px", a.style.alignItems = "center";
-    const i = document.createElement("input");
-    i.className = "form-control form-control-sm fb-group-id", i.placeholder = "Group ID (e.g., vehicleDetails)", i.value = m;
-    const o = document.createElement("button");
-    o.type = "button", o.className = "btn btn-sm btn-link text-danger", o.textContent = "remove group", o.addEventListener("click", () => b.remove()), a.appendChild(i), a.appendChild(o), b.appendChild(a);
+  function z(d = "") {
+    const y = document.createElement("div");
+    y.className = "fb-group-block", y.style.border = "1px solid #e5e7eb", y.style.borderRadius = "6px", y.style.padding = "8px", y.style.marginTop = "8px";
     const r = document.createElement("div");
-    r.style.border = "1px dashed #cbd5e1", r.style.padding = "8px", r.style.marginTop = "6px", b.appendChild(r);
-    const u = document.createElement("div");
-    u.style.display = "flex", u.style.flexWrap = "wrap", u.style.gap = "12px", u.style.alignItems = "center", u.style.marginBottom = "6px";
-    const v = document.createElement("label");
-    v.textContent = "Mode";
+    r.style.display = "grid", r.style.gridTemplateColumns = "1fr auto", r.style.gap = "8px", r.style.alignItems = "center";
+    const c = document.createElement("input");
+    c.className = "form-control form-control-sm fb-group-id", c.placeholder = "Group ID (e.g., vehicleDetails)", c.value = d;
+    const o = document.createElement("button");
+    o.type = "button", o.className = "btn btn-sm btn-link text-danger", o.textContent = "remove group", o.addEventListener("click", () => y.remove()), r.appendChild(c), r.appendChild(o), y.appendChild(r);
+    const a = document.createElement("div");
+    a.style.border = "1px dashed #cbd5e1", a.style.padding = "8px", a.style.marginTop = "6px", y.appendChild(a);
+    const i = document.createElement("div");
+    i.style.display = "flex", i.style.flexWrap = "wrap", i.style.gap = "12px", i.style.alignItems = "center", i.style.marginBottom = "6px";
+    const h = document.createElement("label");
+    h.textContent = "Mode";
     const s = document.createElement("select");
-    s.className = "form-select form-select-sm fb-group-mode", ["any", "all"].forEach((S) => {
+    s.className = "form-select form-select-sm fb-group-mode", ["any", "all"].forEach((w) => {
       const q = document.createElement("option");
-      q.value = S, q.textContent = S.toUpperCase() + (S === "any" ? " (OR)" : " (AND)"), s.appendChild(q);
+      q.value = w, q.textContent = w.toUpperCase() + (w === "any" ? " (OR)" : " (AND)"), s.appendChild(q);
     });
-    const w = document.createElement("div");
-    w.innerHTML = `
+    const C = document.createElement("div");
+    C.innerHTML = `
       <label style="margin-right:8px;">Actions</label>
       <label class="form-check form-check-inline"><input class="fb-act form-check-input" type="checkbox" value="show" checked> <span class="form-check-label">show</span></label>
       <label class="form-check form-check-inline"><input class="fb-act form-check-input" type="checkbox" value="require"> <span class="form-check-label">require</span></label>
       <label class="form-check form-check-inline"><input class="fb-act form-check-input" type="checkbox" value="enable"> <span class="form-check-label">enable</span></label>
       <label class="form-check form-check-inline"><input class="fb-act form-check-input" type="checkbox" value="disable"> <span class="form-check-label">disable</span></label>
       <label class="form-check form-check-inline"><input class="fb-act form-check-input" type="checkbox" value="hide"> <span class="form-check-label">hide</span></label>
-    `, u.appendChild(v), u.appendChild(s), u.appendChild(w), r.appendChild(u);
+    `, i.appendChild(h), i.appendChild(s), i.appendChild(C), a.appendChild(i);
     const E = document.createElement("div");
-    E.className = "fb-group-rules", r.appendChild(E);
-    const x = document.createElement("button");
-    x.type = "button", x.className = "btn btn-sm btn-outline-secondary", x.textContent = "Add rule", x.style.marginTop = "8px", r.appendChild(x);
-    function O(S, q, H) {
-      const T = document.createElement("div");
-      T.className = "fb-group-rule", T.style.display = "grid", T.style.gridTemplateColumns = "1fr 1fr 1fr auto", T.style.gap = "6px", T.style.marginTop = "6px";
-      const j = document.createElement("select");
-      j.className = "form-select form-select-sm fb-rule-field";
-      const oe = p();
-      if (oe.length)
-        oe.forEach((G) => {
+    E.className = "fb-group-rules", a.appendChild(E);
+    const S = document.createElement("button");
+    S.type = "button", S.className = "btn btn-sm btn-outline-secondary", S.textContent = "Add rule", S.style.marginTop = "8px", a.appendChild(S);
+    function G(w, q, R) {
+      const B = document.createElement("div");
+      B.className = "fb-group-rule", B.style.display = "grid", B.style.gridTemplateColumns = "1fr 1fr 1fr auto", B.style.gap = "6px", B.style.marginTop = "6px";
+      const F = document.createElement("select");
+      F.className = "form-select form-select-sm fb-rule-field";
+      const le = b();
+      if (le.length)
+        le.forEach((T) => {
           const A = document.createElement("option");
-          A.value = G.name, A.textContent = G.label ? `${G.label} (${G.name})` : G.name, j.appendChild(A);
+          A.value = T.name, A.textContent = T.label ? `${T.label} (${T.name})` : T.name, F.appendChild(A);
         });
       else {
-        const G = document.createElement("option");
-        G.value = "", G.textContent = "(no fields yet)", j.appendChild(G);
+        const T = document.createElement("option");
+        T.value = "", T.textContent = "(no fields yet)", F.appendChild(T);
       }
-      S && (j.value = S);
-      const P = document.createElement("select");
-      P.className = "form-select form-select-sm fb-rule-op";
-      const le = (G) => {
-        var $;
-        const A = p().find((X) => X.name === G), Z = (A == null ? void 0 : A.type) === "number", B = (A == null ? void 0 : A.type) === "radio-group" || (A == null ? void 0 : A.type) === "select" || !!(($ = A == null ? void 0 : A.values) != null && $.length), K = Z ? ["equals", "notEquals", "gt", "gte", "lt", "lte", "isEmpty", "notEmpty"] : B ? ["equals", "notEquals", "isEmpty", "notEmpty"] : ["equals", "notEquals", "contains", "startsWith", "endsWith", "isEmpty", "notEmpty"];
-        P.innerHTML = "", K.forEach((X) => {
-          const te = document.createElement("option");
-          te.value = X, te.textContent = X, P.appendChild(te);
+      w && (F.value = w);
+      const Q = document.createElement("select");
+      Q.className = "form-select form-select-sm fb-rule-op";
+      const se = (T) => {
+        var V;
+        const A = b().find((ee) => ee.name === T), K = (A == null ? void 0 : A.type) === "number", J = (A == null ? void 0 : A.type) === "radio-group" || (A == null ? void 0 : A.type) === "select" || !!((V = A == null ? void 0 : A.values) != null && V.length), X = K ? ["equals", "notEquals", "gt", "gte", "lt", "lte", "isEmpty", "notEmpty"] : J ? ["equals", "notEquals", "isEmpty", "notEmpty"] : ["equals", "notEquals", "contains", "startsWith", "endsWith", "isEmpty", "notEmpty"];
+        Q.innerHTML = "", X.forEach((ee) => {
+          const ne = document.createElement("option");
+          ne.value = ee, ne.textContent = ee, Q.appendChild(ne);
         });
       };
-      le(j.value), q && (P.value = q);
-      const Q = document.createElement("div");
-      Q.className = "fb-rule-value-wrap";
-      const se = (G, A) => {
-        Q.innerHTML = "";
-        const Z = h(G);
-        if (Z && Z.length) {
-          const B = document.createElement("select");
-          B.className = "form-select form-select-sm fb-rule-value", Z.forEach((K) => {
-            const $ = document.createElement("option");
-            $.value = K.value, $.textContent = K.label ?? K.value, B.appendChild($);
-          }), A && (B.value = A), Q.appendChild(B);
+      se(F.value), q && (Q.value = q);
+      const Y = document.createElement("div");
+      Y.className = "fb-rule-value-wrap";
+      const re = (T, A) => {
+        Y.innerHTML = "";
+        const K = v(T);
+        if (K && K.length) {
+          const J = document.createElement("select");
+          J.className = "form-select form-select-sm fb-rule-value", K.forEach((X) => {
+            const V = document.createElement("option");
+            V.value = X.value, V.textContent = X.label ?? X.value, J.appendChild(V);
+          }), A && (J.value = A), Y.appendChild(J);
         } else {
-          const B = document.createElement("input");
-          B.type = "text", B.className = "form-control form-control-sm fb-rule-value", A && (B.value = A), Q.appendChild(B);
+          const J = document.createElement("input");
+          J.type = "text", J.className = "form-control form-control-sm fb-rule-value", A && (J.value = A), Y.appendChild(J);
         }
       };
-      se(j.value, H), j.addEventListener("change", () => {
-        le(j.value), se(j.value);
+      re(F.value, R), F.addEventListener("change", () => {
+        se(F.value), re(F.value);
       });
-      const Y = document.createElement("button");
-      Y.type = "button", Y.className = "btn btn-sm btn-outline-danger", Y.textContent = "Remove", Y.addEventListener("click", () => T.remove()), T.appendChild(j), T.appendChild(P), T.appendChild(Q), T.appendChild(Y), E.appendChild(T);
+      const Z = document.createElement("button");
+      Z.type = "button", Z.className = "btn btn-sm btn-outline-danger", Z.textContent = "Remove", Z.addEventListener("click", () => B.remove()), B.appendChild(F), B.appendChild(Q), B.appendChild(Y), B.appendChild(Z), E.appendChild(B);
     }
-    return x.addEventListener("click", () => O()), b._set = (S) => {
-      S != null && S.mode && (s.value = S.mode);
-      const q = new Set((S == null ? void 0 : S.actions) || []);
-      w.querySelectorAll(".fb-act").forEach((H) => {
-        H.checked = q.has(H.value);
-      }), D(E), ((S == null ? void 0 : S.rules) || []).forEach((H) => O(H.field, H.op, H.value));
-    }, F.appendChild(b), b;
+    return S.addEventListener("click", () => G()), y._set = (w) => {
+      w != null && w.mode && (s.value = w.mode);
+      const q = new Set((w == null ? void 0 : w.actions) || []);
+      C.querySelectorAll(".fb-act").forEach((R) => {
+        R.checked = q.has(R.value);
+      }), $(E), ((w == null ? void 0 : w.rules) || []).forEach((R) => G(R.field, R.op, R.value));
+    }, I.appendChild(y), y;
   }
-  function z(m) {
-    D(F);
-    const b = Object.keys(m || {});
-    if (!b.length) {
-      V("");
+  function U(d) {
+    $(I);
+    const y = Object.keys(d || {});
+    if (!y.length) {
+      z("");
       return;
     }
-    b.forEach((a) => {
-      V(a)._set(m[a] || {});
+    y.forEach((r) => {
+      z(r)._set(d[r] || {});
     });
   }
-  function U() {
-    const m = {};
-    return F.querySelectorAll(".fb-group-block").forEach((a) => {
-      const i = a.querySelector(".fb-group-id").value.trim();
-      if (!i) return;
-      const o = a.querySelector(".fb-group-mode").value || "any", r = Array.from(a.querySelectorAll(".fb-act")).filter((s) => s.checked).map((s) => s.value), u = [];
-      a.querySelectorAll(".fb-group-rule").forEach((s) => {
-        const w = s.querySelector(".fb-rule-field").value, E = s.querySelector(".fb-rule-op").value, x = s.querySelector(".fb-rule-value"), O = (x == null ? void 0 : x.value) ?? "";
-        w && E && u.push({ field: w, op: E, value: O });
-      }), m[i] = { mode: o, rules: u, actions: r };
-    }), m;
+  function P() {
+    const d = {};
+    return I.querySelectorAll(".fb-group-block").forEach((r) => {
+      const c = r.querySelector(".fb-group-id").value.trim();
+      if (!c) return;
+      const o = r.querySelector(".fb-group-mode").value || "any", a = Array.from(r.querySelectorAll(".fb-act")).filter((s) => s.checked).map((s) => s.value), i = [];
+      r.querySelectorAll(".fb-group-rule").forEach((s) => {
+        const C = s.querySelector(".fb-rule-field").value, E = s.querySelector(".fb-rule-op").value, S = s.querySelector(".fb-rule-value"), G = (S == null ? void 0 : S.value) ?? "";
+        C && E && i.push({ field: C, op: E, value: G });
+      }), d[c] = { mode: o, rules: i, actions: a };
+    }), d;
   }
   return {
     getJson: () => n.json,
-    setJson: (m) => {
-      n.json = m;
+    setJson: (d) => {
+      n.json = d;
     },
-    getGroups: () => J(n.json || "{}") || {}
+    getGroups: () => j(n.json || "{}") || {}
   };
 }
-const Ae = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const qe = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  attachLogicGroupsManager: de,
-  withConditionalLogic: ue
+  attachLogicGroupsManager: pe,
+  withConditionalLogic: de
 }, Symbol.toStringTag, { value: "Module" }));
-function re(e) {
+function ce(e) {
   const t = window.CSS;
   return t && typeof t.escape == "function" ? t.escape(e) : e.replace(/([^a-zA-Z0-9_-])/g, "\\$1");
 }
-function pe(e) {
-  const t = re(e);
+function me(e) {
+  const t = ce(e);
   return `[name="${t}"], [name="${t}[]"], [data-fb-name="${t}"]`;
 }
-function ce(e) {
+function ie(e) {
   const t = [".form-group", ".fb-field-wrapper", ".form-field", ".field-wrapper", ".row", ".mb-3", ".box"];
   for (const l of t) {
     const n = e.closest(l);
@@ -498,66 +498,66 @@ function ce(e) {
   }
   return e.parentElement || e;
 }
-function me(e) {
+function fe(e) {
   var t, l;
   if (e instanceof HTMLInputElement) {
     if (e.type === "radio") {
-      const n = e.name, d = ((t = e.form) == null ? void 0 : t.querySelectorAll(`input[type="radio"][name="${n}"]`)) || document.querySelectorAll(`input[type="radio"][name="${n}"]`);
-      for (const p of Array.from(d)) {
-        const h = p;
-        if (h.checked) return h.value;
+      const n = e.name, u = ((t = e.form) == null ? void 0 : t.querySelectorAll(`input[type="radio"][name="${n}"]`)) || document.querySelectorAll(`input[type="radio"][name="${n}"]`);
+      for (const p of Array.from(u)) {
+        const b = p;
+        if (b.checked) return b.value;
       }
       return null;
     }
     if (e.type === "checkbox") {
-      const n = e.name, d = ((l = e.form) == null ? void 0 : l.querySelectorAll(`input[type="checkbox"][name="${n}"]`)) || document.querySelectorAll(`input[type="checkbox"][name="${n}"]`), p = [];
-      return Array.from(d).forEach((h) => {
-        const f = h;
-        f.checked && p.push(f.value);
+      const n = e.name, u = ((l = e.form) == null ? void 0 : l.querySelectorAll(`input[type="checkbox"][name="${n}"]`)) || document.querySelectorAll(`input[type="checkbox"][name="${n}"]`), p = [];
+      return Array.from(u).forEach((b) => {
+        const v = b;
+        v.checked && p.push(v.value);
       }), p;
     }
     return e.value;
   }
   return e instanceof HTMLSelectElement ? e.multiple ? Array.from(e.selectedOptions).map((n) => n.value) : e.value : e instanceof HTMLTextAreaElement ? e.value : e.value ?? e.textContent ?? null;
 }
-function fe(e, t) {
+function ye(e, t) {
   const l = t.op, n = t.value;
   if (Array.isArray(e))
     return l === "contains" || l === "equals" ? e.includes(n) : l === "notEquals" ? !e.includes(n) : l === "isEmpty" ? e.length === 0 : l === "notEmpty" ? e.length > 0 : !1;
-  const d = e == null ? "" : String(e), p = n == null ? "" : String(n), h = Number(e), f = Number(n);
+  const u = e == null ? "" : String(e), p = n == null ? "" : String(n), b = Number(e), v = Number(n);
   switch (l) {
     case "equals":
       return e == n;
     case "notEquals":
       return e != n;
     case "contains":
-      return d.includes(p);
+      return u.includes(p);
     case "startsWith":
-      return d.startsWith(p);
+      return u.startsWith(p);
     case "endsWith":
-      return d.endsWith(p);
+      return u.endsWith(p);
     case "gt":
-      return h > f;
+      return b > v;
     case "gte":
-      return h >= f;
+      return b >= v;
     case "lt":
-      return h < f;
+      return b < v;
     case "lte":
-      return h <= f;
+      return b <= v;
     case "isEmpty":
-      return d.trim() === "";
+      return u.trim() === "";
     case "notEmpty":
-      return d.trim() !== "";
+      return u.trim() !== "";
     default:
       return !1;
   }
 }
-function ye(e, t) {
-  const l = t.rules.map((d) => {
-    const p = e.querySelector(pe(d.field));
+function be(e, t) {
+  const l = t.rules.map((u) => {
+    const p = e.querySelector(me(u.field));
     if (!p) return !1;
-    const h = me(p);
-    return fe(h, d);
+    const b = fe(p);
+    return ye(b, u);
   }), n = t.mode === "all" ? l.every(Boolean) : l.some(Boolean);
   return window.__FB_LOGIC_DEBUG__ && console.log("[fb-logic] group", t, "results", l, "ok?", n), n;
 }
@@ -566,16 +566,16 @@ function ae(e, t) {
     n.disabled = t, t && (n.required = !1);
   });
 }
-function be(e, t) {
+function ge(e, t) {
   e.style.display = t ? "" : "none", e.setAttribute("aria-hidden", t ? "false" : "true");
 }
-function ge(e, t, l) {
+function he(e, t, l) {
   const n = t.includes("show") ? l : t.includes("hide") ? !l : l;
-  be(e, n), t.includes("disable") && ae(e, !0), t.includes("enable") && ae(e, !1), t.includes("require") && e.querySelectorAll("input, select, textarea").forEach((p) => {
+  ge(e, n), t.includes("disable") && ae(e, !0), t.includes("enable") && ae(e, !1), t.includes("require") && e.querySelectorAll("input, select, textarea").forEach((p) => {
     p.required = n;
   });
 }
-function he(e) {
+function ve(e) {
   const t = e.getAttribute("data-logic");
   if (!t) return null;
   try {
@@ -584,7 +584,7 @@ function he(e) {
     return window.__FB_LOGIC_DEBUG__ && console.warn("Invalid data-logic JSON", t, e), null;
   }
 }
-function ve(e) {
+function Ee(e) {
   if (!e) return null;
   if (typeof e == "string") return e;
   try {
@@ -593,11 +593,11 @@ function ve(e) {
     return null;
   }
 }
-function Ee(e, t) {
-  const l = re(t);
+function xe(e, t) {
+  const l = ce(t);
   return e.querySelectorAll(`[name="${l}"], [name="${l}[]"]`);
 }
-function xe(e, t) {
+function Se(e, t) {
   if (t) {
     try {
       typeof t == "string" && (t = JSON.parse(t));
@@ -608,26 +608,26 @@ function xe(e, t) {
       for (const l of t) {
         const n = l == null ? void 0 : l.name;
         if (!n) continue;
-        const d = Ee(e, n);
-        if (!d.length) continue;
-        const p = ve(l.logic), h = l.logicApplyTo || l.applyTo || "self", f = l.logicGroup;
-        if (!p && f && h === "group") {
-          d.forEach((g) => g.setAttribute("data-logic-group", String(f)));
+        const u = xe(e, n);
+        if (!u.length) continue;
+        const p = Ee(l.logic), b = l.logicApplyTo || l.applyTo || "self", v = l.logicGroup;
+        if (!p && v && b === "group") {
+          u.forEach((m) => m.setAttribute("data-logic-group", String(v)));
           continue;
         }
-        p && (h === "container" ? d.forEach((g) => {
-          (typeof window.FB_GET_WRAPPER == "function" ? window.FB_GET_WRAPPER(g) : ce(g)).setAttribute("data-logic-container", p);
-        }) : h === "group" && f ? d.forEach((g) => g.setAttribute("data-logic-group", String(f))) : d.forEach((g) => g.setAttribute("data-logic", p)));
+        p && (b === "container" ? u.forEach((m) => {
+          (typeof window.FB_GET_WRAPPER == "function" ? window.FB_GET_WRAPPER(m) : ie(m)).setAttribute("data-logic-container", p);
+        }) : b === "group" && v ? u.forEach((m) => m.setAttribute("data-logic-group", String(v))) : u.forEach((m) => m.setAttribute("data-logic", p)));
       }
   }
 }
-function Se(e) {
+function we(e) {
   return e.actions && e.actions.length ? e.actions : ["show"];
 }
-function we(e) {
+function Ce(e) {
   const t = [];
   return e.querySelectorAll("[data-logic]").forEach((l) => {
-    const n = he(l);
+    const n = ve(l);
     n && t.push({ el: l, cfg: n, mode: "self" });
   }), e.querySelectorAll("[data-logic-container]").forEach((l) => {
     const n = l.getAttribute("data-logic-container");
@@ -638,34 +638,34 @@ function we(e) {
       }
   }), e.querySelectorAll("[data-logic-group]").forEach((l) => {
     var p;
-    const n = l.getAttribute("data-logic-group") || "", d = (p = window.fbLogicGroups) == null ? void 0 : p[n];
-    if (d) {
-      const h = { groups: [d], actions: d.actions, applyTo: "group", logicGroup: n };
-      t.push({ el: l, cfg: h, mode: "group", groupId: n });
+    const n = l.getAttribute("data-logic-group") || "", u = (p = window.fbLogicGroups) == null ? void 0 : p[n];
+    if (u) {
+      const b = { groups: [u], actions: u.actions, applyTo: "group", logicGroup: n };
+      t.push({ el: l, cfg: b, mode: "group", groupId: n });
     }
   }), window.__FB_LOGIC_DEBUG__ && console.log("[fb-logic] targets found:", t.length, t), t;
 }
-function ee(e, t, l) {
-  const n = l.getWrapper || ce;
-  t.forEach((d) => {
-    const p = d.el;
-    let h = !0;
-    d.cfg.groups && d.cfg.groups.length && (h = d.cfg.groups.every((c) => ye(e, c)));
-    const f = d.mode === "self" ? n(p) : d.mode === "container" ? p : n(p), g = Se(d.cfg);
-    ge(f, g, h), l.onState && l.onState(p, h), window.__FB_LOGIC_DEBUG__ && console.log("[fb-logic] applied", { el: p, mode: d.mode, actions: g, truthy: h, wrapper: f });
+function te(e, t, l) {
+  const n = l.getWrapper || ie;
+  t.forEach((u) => {
+    const p = u.el;
+    let b = !0;
+    u.cfg.groups && u.cfg.groups.length && (b = u.cfg.groups.every((g) => be(e, g)));
+    const v = u.mode === "self" ? n(p) : u.mode === "container" ? p : n(p), m = we(u.cfg);
+    he(v, m, b), l.onState && l.onState(p, b), window.__FB_LOGIC_DEBUG__ && console.log("[fb-logic] applied", { el: p, mode: u.mode, actions: m, truthy: b, wrapper: v });
   });
 }
-function ne(e, t, l = {}) {
+function oe(e, t, l = {}) {
   const n = e;
   try {
     if (t) {
-      const f = Array.isArray(t) ? t : typeof t == "string" ? JSON.parse(t) : [];
-      if (Array.isArray(f)) {
-        const g = f.find((c) => (c == null ? void 0 : c.type) === "hidden" && ((c == null ? void 0 : c.name) === "__logicGroups" || (c == null ? void 0 : c.name) === "logicGroups"));
-        if (g != null && g.value && typeof g.value == "string")
+      const v = Array.isArray(t) ? t : typeof t == "string" ? JSON.parse(t) : [];
+      if (Array.isArray(v)) {
+        const m = v.find((g) => (g == null ? void 0 : g.type) === "hidden" && ((g == null ? void 0 : g.name) === "__logicGroups" || (g == null ? void 0 : g.name) === "logicGroups"));
+        if (m != null && m.value && typeof m.value == "string")
           try {
-            const c = JSON.parse(g.value);
-            c && typeof c == "object" && (window.fbLogicGroups = c);
+            const g = JSON.parse(m.value);
+            g && typeof g == "object" && (window.fbLogicGroups = g);
           } catch {
           }
       }
@@ -674,46 +674,46 @@ function ne(e, t, l = {}) {
   }
   if (t)
     try {
-      xe(n, t);
-    } catch (f) {
-      window.__FB_LOGIC_DEBUG__ && console.warn("hydrateFromFormData failed", f);
+      Se(n, t);
+    } catch (v) {
+      window.__FB_LOGIC_DEBUG__ && console.warn("hydrateFromFormData failed", v);
     }
-  const d = we(n), p = /* @__PURE__ */ new Set();
-  d.forEach((f) => {
-    var c;
-    (((c = f.cfg) == null ? void 0 : c.groups) || []).forEach((_) => {
-      (_.rules || []).forEach((C) => {
-        C != null && C.field && (p.add(C.field), p.add(String(C.field).replace(/\[\]$/, "")));
+  const u = Ce(n), p = /* @__PURE__ */ new Set();
+  u.forEach((v) => {
+    var g;
+    (((g = v.cfg) == null ? void 0 : g.groups) || []).forEach((x) => {
+      (x.rules || []).forEach((N) => {
+        N != null && N.field && (p.add(N.field), p.add(String(N.field).replace(/\[\]$/, "")));
       });
     });
   }), window.__FB_LOGIC_DEBUG__ && console.log("[fb-logic] watching fields:", Array.from(p));
-  const h = (f) => {
-    const g = f.target;
+  const b = (v) => {
+    const m = v.target;
+    if (!m) return;
+    const g = m.name || m.getAttribute && m.getAttribute("name") || "";
     if (!g) return;
-    const c = g.name || g.getAttribute && g.getAttribute("name") || "";
-    if (!c) return;
-    const _ = c.replace(/\[\]$/, "");
-    (p.has(c) || p.has(_)) && (window.__FB_LOGIC_DEBUG__ && console.log("[fb-logic] change on", c, "→ reeval"), ee(n, d, l));
+    const x = g.replace(/\[\]$/, "");
+    (p.has(g) || p.has(x)) && (window.__FB_LOGIC_DEBUG__ && console.log("[fb-logic] change on", g, "→ reeval"), te(n, u, l));
   };
-  n.addEventListener("input", h, !0), n.addEventListener("change", h, !0), ee(n, d, l), n.addEventListener("fb:reinit-logic", () => ee(n, d, l)), window._fbLogic = { refresh: () => ee(n, d, l) };
+  n.addEventListener("input", b, !0), n.addEventListener("change", b, !0), te(n, u, l), n.addEventListener("fb:reinit-logic", () => te(n, u, l)), window._fbLogic = { refresh: () => te(n, u, l) };
 }
-function Ce(e) {
-  ne(e);
+function ke(e) {
+  oe(e);
 }
-function ke(e, t) {
-  ne(e);
+function Ae(e, t) {
+  oe(e);
 }
-const qe = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+const Le = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  evaluateField: ke,
-  refresh: Ce,
-  setup: ne
+  evaluateField: Ae,
+  refresh: ke,
+  setup: oe
 }, Symbol.toStringTag, { value: "Module" }));
 export {
-  Ae as builder,
-  ke as evaluateField,
-  Ce as refresh,
-  qe as renderer,
-  ne as setup
+  qe as builder,
+  Ae as evaluateField,
+  ke as refresh,
+  Le as renderer,
+  oe as setup
 };
 //# sourceMappingURL=formbuilder-conditional-logic.es.js.map

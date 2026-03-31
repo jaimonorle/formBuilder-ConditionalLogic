@@ -189,12 +189,17 @@ const fb = $('.build-wrap').formBuilder(
   withConditionalLogic({
     panelTitle: 'Conditional Logic',
     enableVisualEditor: true,
+    builderSelector: '.build-wrap',  // CSS selector for formBuilder container (default: '.build-wrap')
     getAvailableFields: () => FieldMeta[],
     getFieldValues: (fieldName) => {label:string, value:string}[] | null
   })
 );
 
-attachLogicGroupsManager(toolbarEl, { getAvailableFields, getFieldValues });
+attachLogicGroupsManager(toolbarEl, {
+  getAvailableFields,
+  getFieldValues,
+  builderSelector: '.build-wrap'    // must match the selector above
+});
 ```
 
 * **Visual Rules Editor** writes JSON to the field’s `logic` textarea (Advanced panel is collapsed by default).

@@ -20,6 +20,8 @@ export interface BuilderInitOptions {
     getAvailableFields?: () => FieldMeta[];
     getFieldValues?: (fieldName: string) => Array<{ label: string; value: string }> | null;
     enableVisualEditor?: boolean;
+    /** CSS selector for the formBuilder container element (default: '.build-wrap') */
+    builderSelector?: string;
 }
 
 const DEFAULT_TYPES = [
@@ -63,6 +65,7 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
     const panelTitle = opts.panelTitle || 'Conditional Logic';
     const types = (opts.types && opts.types.length ? opts.types : DEFAULT_TYPES);
     const enableVE = opts.enableVisualEditor !== false;
+    const selector = opts.builderSelector || '.build-wrap';
 
     // 1) inject custom user attrs so formBuilder shows inputs in the field edit panel
     const typeUserAttrs: Record<string, UserAttrs> = {};
@@ -95,7 +98,7 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
 
     function inferFieldsFromBuilderJson(): FieldMeta[] {
         try {
-            const stage = (window as any).jQuery?.('.build-wrap');
+            const stage = (window as any).jQuery?.(selector);
             const inst = stage?.data('formBuilder');
             const json = inst?.actions?.getData?.('json');
             const arr = typeof json === 'string' ? JSON.parse(json) : (Array.isArray(json) ? json : []);
@@ -220,7 +223,7 @@ export function withConditionalLogic(opts: BuilderInitOptions = {}) {
         const getFieldsNow = (): Array<{ name: string; label?: string; type?: string; values?: { label: string; value: string }[] }> => {
             try {
                 // Prefer provider the builder passed to withConditionalLogic()
-                const stage = (window as any).jQuery?.('.build-wrap');
+                const stage = (window as any).jQuery?.(selector);
                 const inst = stage?.data?.('formBuilder');
                 const data = inst?.actions?.getData?.('json');
                 const arr = typeof data === 'string' ? JSON.parse(data) : (Array.isArray(data) ? data : []);
@@ -489,15 +492,18 @@ export function attachLogicGroupsManager(
         initialJson?: string;
         getAvailableFields?: () => FieldMeta[];
         getFieldValues?: (fieldName: string) => Array<{ label: string; value: string }> | null;
+        /** CSS selector for the formBuilder container element (default: '.build-wrap') */
+        builderSelector?: string;
     }
 ) {
     const opts = (typeof initialOrOpts === 'string') ? { initialJson: initialOrOpts } : (initialOrOpts || {});
     const state = { json: opts.initialJson || '' };
+    const selector = opts.builderSelector || '.build-wrap';
 
     // ---- Helpers to obtain fields/values ----
     function inferFieldsFromBuilderJson(): FieldMeta[] {
         try {
-            const $stage = (window as any).jQuery?.('.build-wrap');
+            const $stage = (window as any).jQuery?.(selector);
             const fb = $stage?.data?.('formBuilder');
             const data = fb?.actions?.getData?.('json');
             const arr = typeof data === 'string' ? JSON.parse(data) : (Array.isArray(data) ? data : []);
@@ -618,7 +624,7 @@ export function attachLogicGroupsManager(
 
         // Patch export so JSON returned by getData('json') contains __logicGroups (no rebuild).
         try {
-            const $stage = (window as any).jQuery?.('.build-wrap');
+            const $stage = (window as any).jQuery?.(selector);
             const fb = $stage?.data?.('formBuilder');
             if (fb?.actions?.getData && !(fb as any).__fbLogicGroupsPatched) {
                 const origGetData = fb.actions.getData.bind(fb.actions);
